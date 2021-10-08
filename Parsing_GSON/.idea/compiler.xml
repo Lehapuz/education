@@ -7,6 +7,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="homework_11.5" />
+        <module name="Parsing_GSON" />
       </profile>
     </annotationProcessing>
   </component>

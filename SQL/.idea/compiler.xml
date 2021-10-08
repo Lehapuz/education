@@ -9,6 +9,7 @@
         <module name="homework_14.3" />
         <module name="homework_14.10" />
         <module name="homework_14.2" />
+        <module name="SQL" />
       </profile>
     </annotationProcessing>
   </component>
