@@ -1,8 +1,0 @@
-spring:
-  datasource:
-    url: jdbc:mysql://localhost:3306/diplomdb?useSSL=false
-    username: root
-    password: Energotehno202111101983KE7
-  jpa:
-    hibernate:
-      ddl-auto: update
