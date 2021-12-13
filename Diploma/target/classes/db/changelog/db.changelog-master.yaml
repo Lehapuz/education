@@ -1,8 +1,8 @@
-diplomdb:
+databaseChangeLog:
   - logicalFilePath: db/changelog/db.changelog-master.yaml
   - changeSet:
       id: 1
-      author: your_liquibase_username
+      author: aliaksei_basavets
       changes:
         - createTable:
             tableName: users
@@ -45,3 +45,63 @@ diplomdb:
               - column:
                   name: photo
                   type: TEXT
+  - changeSet:
+      id: 2
+      author: aliaksei_basavets
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: is_moderator
+                  value: 1
+              - column:
+                  name: reg_time
+                  value: 2021.04.12 20:55:55
+              - column:
+                  name: name
+                  value: Ivan
+              - column:
+                  name: email
+                  value: Ivan@mail.ru
+              - column:
+                  name: password
+                  value: aaaaaaaaaa
+              - column:
+                  name: code
+                  value: abcd
+              - column:
+                  name: photo
+                  value: ddddd
+  - changeSet:
+      id: 3
+      author: aliaksei_basavets
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: is_moderator
+                  value: 0
+              - column:
+                  name: reg_time
+                  value: 2020.05.11 21:45:45
+              - column:
+                  name: name
+                  value: Vasya
+              - column:
+                  name: email
+                  value: Vasya@mail.ru
+              - column:
+                  name: password
+                  value: bbbbbbbbbb
+              - column:
+                  name: code
+                  value: dfgh
+              - column:
+                  name: photo
+                  value: cccc
+      rollback:
+        - delete:
+            tableName: users
+            where: username in ('Ivan', 'Vasya')
