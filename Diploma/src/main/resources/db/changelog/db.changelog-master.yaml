@@ -60,7 +60,7 @@ databaseChangeLog:
                   value: 2021.04.12 20:55:55
               - column:
                   name: name
-                  value: Ivan
+                  value: Иван
               - column:
                   name: email
                   value: Ivan@mail.ru
@@ -88,7 +88,7 @@ databaseChangeLog:
                   value: 2020.05.11 21:45:45
               - column:
                   name: name
-                  value: Vasya
+                  value: Вася
               - column:
                   name: email
                   value: Vasya@mail.ru
@@ -104,4 +104,512 @@ databaseChangeLog:
       rollback:
         - delete:
             tableName: users
-            where: username in ('Ivan', 'Vasya')
+            where: username in ('Иван', 'Вася')
+  - changeSet:
+      id: 4
+      author: aliaksei_basavets
+      changes:
+        - createTable:
+            tableName: posts
+            columns:
+              - column:
+                  name: id
+                  type: INT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: is_active
+                  type: TINYINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: moderation_status
+                  type: ENUM("NEW", "ACCEPTED", "DECLINED")
+                  constraints:
+                    nullable: false
+              - column:
+                  name: moderator_id
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: TINYINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: time
+                  type: DATETIME
+                  constraints:
+                    nullable: false
+              - column:
+                  name: title
+                  type: varchar(250)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: text
+                  type: TEXT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: view_count
+                  type: INT
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 5
+      author: aliaksei_basavets
+      changes:
+        - insert:
+            tableName: posts
+            columns:
+              - column:
+                  name: is_active
+                  value: 1
+              - column:
+                  name: moderation_status
+                  value: ACCEPTED
+              - column:
+                  name: moderator_id
+                  value: 1
+              - column:
+                  name: user_id
+                  value: 1
+              - column:
+                  name: time
+                  value: 2021.11.12 18:19:55
+              - column:
+                  name: title
+                  value: Пост №1
+              - column:
+                  name: text
+                  value: Пост обо всем хорошем
+              - column:
+                  name: view_count
+                  value: 156
+  - changeSet:
+      id: 6
+      author: aliaksei_basavets
+      changes:
+        - insert:
+            tableName: posts
+            columns:
+              - column:
+                  name: is_active
+                  value: 1
+              - column:
+                  name: moderation_status
+                  value: NEW
+              - column:
+                  name: moderator_id
+                  value: 1
+              - column:
+                  name: user_id
+                  value: 2
+              - column:
+                  name: time
+                  value: 2021.11.25 15:54:45
+              - column:
+                  name: title
+                  value: Пост №2
+              - column:
+                  name: text
+                  value: Пост обо всем плохом
+              - column:
+                  name: view_count
+                  value: 56
+#             rollback:
+#              - delete:
+#                  tableName: posts
+#                  where: postid in ('1', '2')
+  - changeSet:
+      id: 7
+      author: aliaksei_basavets
+      changes:
+        - createTable:
+            tableName: post_votes
+            columns:
+              - column:
+                  name: id
+                  type: INT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: post_id
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: time
+                  type: DATETIME
+                  constraints:
+                    nullable: false
+#              - column:
+#                  name: value
+#                    type: TINYINT
+#                    constraints:
+#                      nullable: false
+  - changeSet:
+      id: 8
+      author: aliaksei_basavets
+      changes:
+        - insert:
+            tableName: post_votes
+            columns:
+              - column:
+                  name: user_id
+                  value: 2
+              - column:
+                  name: post_id
+                  value: 2
+              - column:
+                  name: time
+                  value: 2021.11.26 18:55:32
+#              - column:
+#                  name: value
+#                  value: 1
+  - changeSet:
+      id: 9
+      author: aliaksei_basavets
+      changes:
+        - insert:
+            tableName: post_votes
+            columns:
+              - column:
+                  name: user_id
+                  value: 1
+              - column:
+                  name: post_id
+                  value: 2
+              - column:
+                  name: time
+                  value: 2021.10.26 17:55:32
+#              - column:
+#                  name: value
+#                  value: 1
+            rollback:
+              - delete:
+                  tableName: post_votes
+                  where: postvoteid in ('1', '2')
+  - changeSet:
+      id: 10
+      author: aliaksei_basavets
+      changes:
+        - createTable:
+            tableName: tags
+            columns:
+              - column:
+                  name: id
+                  type: INT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(250)
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 11
+      author: aliaksei_basavets
+      changes:
+        - insert:
+            tableName: tags
+            columns:
+              - column:
+                  name: name
+                  value: Хороший пост
+  - changeSet:
+      id: 12
+      author: aliaksei_basavets
+      changes:
+        - insert:
+            tableName: tags
+            columns:
+              - column:
+                  name: name
+                  value: Неплохой пост
+      rollback:
+        - delete:
+            tableName: tags
+            where: tagid in ('1', '2')
+  - changeSet:
+      id: 13
+      author: aliaksei_basavets
+      changes:
+        - createTable:
+            tableName: tag2posts
+            columns:
+              - column:
+                  name: id
+                  type: INT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: post_id
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: tag_id
+                  type: INT
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 14
+      author: aliaksei_basavets
+      changes:
+        - insert:
+            tableName: tag2posts
+            columns:
+              - column:
+                  name: post_id
+                  value: 1
+              - column:
+                  name: tag_id
+                  value: 2
+  - changeSet:
+      id: 15
+      author: aliaksei_basavets
+      changes:
+        - insert:
+            tableName: tag2posts
+            columns:
+              - column:
+                  name: post_id
+                  value: 2
+              - column:
+                  name: tag_id
+                  value: 1
+      rollback:
+        - delete:
+            tableName: post2tags
+            where: tag2postid in ('1', '2')
+  - changeSet:
+      id: 16
+      author: aliaksei_basavets
+      changes:
+        - createTable:
+            tableName: post_comments
+            columns:
+              - column:
+                  name: id
+                  type: INT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: parent_id
+                  type: INT
+              - column:
+                  name: post_id
+                  type: INT
+                  constraints:
+                      nullable: false
+              - column:
+                  name: user_id
+                  type: INT
+                  constraints:
+                      nullable: false
+              - column:
+                  name: time
+                  type: DATETIME
+                  constraints:
+                    nullable: false
+              - column:
+                  name: text
+                  type: TEXT
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 17
+      author: aliaksei_basavets
+      changes:
+        - insert:
+            tableName: post_comments
+            columns:
+              - column:
+                  name: parent_id
+                  value: 1
+              - column:
+                  name: post_id
+                  value: 1
+              - column:
+                  name: user_id
+                  value: 1
+              - column:
+                  name: time
+                  value: 2021.12.01 18:19:55
+              - column:
+                  name: text
+                  value: Хороший комментарий
+  - changeSet:
+      id: 18
+      author: aliaksei_basavets
+      changes:
+        - insert:
+            tableName: post_comments
+            columns:
+              - column:
+                  name: parent_id
+                  value:
+              - column:
+                  name: post_id
+                  value: 2
+              - column:
+                  name: user_id
+                  value: 2
+              - column:
+                  name: time
+                  value: 2021.12.15 16:15:55
+              - column:
+                  name: text
+                  value: Просто комментарий
+      rollback:
+        - delete:
+            tableName: post_comments
+            where: postcommentid in ('1', '2')
+  - changeSet:
+      id: 19
+      author: aliaksei_basavets
+      changes:
+        - createTable:
+            tableName: captcha_codes
+            columns:
+              - column:
+                  name: id
+                  type: INT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: time
+                  type: DATETIME
+                  constraints:
+                    nullable: false
+              - column:
+                  name: code
+                  type: TINYTEXT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: secret_code
+                  type: TINYTEXT
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 20
+      author: aliaksei_basavets
+      changes:
+        - insert:
+            tableName: captcha_codes
+            columns:
+            - column:
+                name: time
+                value: 2021.12.05 17:58:55
+            - column:
+                name: code
+                value: 123
+            - column:
+                name: secret_code
+                value: 123456
+  - changeSet:
+      id: 21
+      author: aliaksei_basavets
+      changes:
+        - insert:
+            tableName: captcha_codes
+            columns:
+            - column:
+                name: time
+                value: 2021.11.30 05:54:55
+            - column:
+                name: code
+                value: 987
+            - column:
+                name: secret_code
+                value: 987654
+      rollback:
+        - delete:
+            tableName: captca_codes
+            where: captchacodeid in ('1', '2')
+  - changeSet:
+      id: 22
+      author: aliaksei_basavets
+      changes:
+        - createTable:
+            tableName: global_settings
+            columns:
+              - column:
+                  name: id
+                  type: INT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: code
+                  type: varchar(250)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(250)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: value
+                  type: varchar(250)
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 23
+      author: aliaksei_basavets
+      changes:
+        - insert:
+            tableName: global_settings
+            columns:
+              - column:
+                  name: code
+                  value: MULTIUSER_CODE
+              - column:
+                  name: name
+                  value: Многопользовательский режим
+              - column:
+                  name: value
+                  value: "NO"
+  - changeSet:
+      id: 24
+      author: aliaksei_basavets
+      changes:
+        - insert:
+            tableName: global_settings
+            columns:
+              - column:
+                  name: code
+                  value: POST_PREMODERATION
+              - column:
+                  name: name
+                  value: Премодерация постов
+              - column:
+                  name: value
+                  value: "YES"
+      rollback:
+        - delete:
+            tableName: global_settings
+            where: globalsettingid in ('1', '2')
