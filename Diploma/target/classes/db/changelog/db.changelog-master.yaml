@@ -586,7 +586,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: code
-                  value: MULTIUSER_CODE
+                  value: MULTIUSER_MODE
               - column:
                   name: name
                   value: Многопользовательский режим
@@ -606,6 +606,22 @@ databaseChangeLog:
               - column:
                   name: name
                   value: Премодерация постов
+              - column:
+                  name: value
+                  value: "YES"
+  - changeSet:
+      id: 25
+      author: aliaksei_basavets
+      changes:
+        - insert:
+            tableName: global_settings
+            columns:
+              - column:
+                  name: code
+                  value: STATICS_IS_PUBLIC
+              - column:
+                  name: name
+                  value: Показывать всем статистику блога
               - column:
                   name: value
                   value: "YES"

@@ -10,13 +10,11 @@ public class GlobalSetting {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "code", nullable = false)
-    private GlobalSettingsCode code;
+    private String code;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "name", nullable = false)
-    private GlobalSettingsName name;
+    private String name;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "value", nullable = false)
@@ -30,27 +28,27 @@ public class GlobalSetting {
         this.id = id;
     }
 
-    public GlobalSettingsCode getCode() {
-        return code;
-    }
-
-    public void setCode(GlobalSettingsCode code) {
-        this.code = code;
-    }
-
-    public GlobalSettingsName getName() {
-        return name;
-    }
-
-    public void setName(GlobalSettingsName name) {
-        this.name = name;
-    }
-
     public GlobalSettingsValue getValue() {
         return value;
     }
 
     public void setValue(GlobalSettingsValue value) {
         this.value = value;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 }

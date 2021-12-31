@@ -10,7 +10,7 @@ public class AuthCheckResponse {
 
     private String email;
 
-    private Integer isModerator;
+    private Boolean moderation;
 
     private Integer moderationCount;
 
@@ -48,14 +48,6 @@ public class AuthCheckResponse {
         this.email = email;
     }
 
-    public Integer getIsModerator() {
-        return isModerator;
-    }
-
-    public void setIsModerator(Integer isModerator) {
-        this.isModerator = isModerator;
-    }
-
     public Integer getModerationCount() {
         return moderationCount;
     }
@@ -70,5 +62,13 @@ public class AuthCheckResponse {
 
     public void setSettings(Boolean settings) {
         this.settings = settings;
+    }
+
+    public Boolean getModeration() {
+        return moderation;
+    }
+
+    public void setModeration(Boolean moderation) {
+        this.moderation = moderation;
     }
 }
