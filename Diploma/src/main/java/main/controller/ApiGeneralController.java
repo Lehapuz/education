@@ -34,7 +34,6 @@ public class ApiGeneralController {
         Iterable<GlobalSetting> globalSettingIterable = globalSettingRepository.findAll();
         SettingsResponse settingsResponse = new SettingsResponse();
         for (GlobalSetting globalSetting : globalSettingIterable) {
-            System.out.println(globalSetting.getCode() + globalSetting.getValue().name());
             if (globalSetting.getId() == 1) {
                 settingsResponse.setMultiuserMode(globalSetting.getValue().name().equals("YES"));
             }

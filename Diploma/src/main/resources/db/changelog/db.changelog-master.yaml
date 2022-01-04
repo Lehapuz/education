@@ -254,11 +254,11 @@ databaseChangeLog:
                   type: DATETIME
                   constraints:
                     nullable: false
-#              - column:
-#                  name: value
-#                    type: TINYINT
-#                    constraints:
-#                      nullable: false
+              - column:
+                  name: value
+                  type: TINYINT
+                  constraints:
+                    nullable: false
   - changeSet:
       id: 8
       author: aliaksei_basavets
@@ -275,9 +275,9 @@ databaseChangeLog:
               - column:
                   name: time
                   value: 2021.11.26 18:55:32
-#              - column:
-#                  name: value
-#                  value: 1
+              - column:
+                  name: value
+                  value: 1
   - changeSet:
       id: 9
       author: aliaksei_basavets
@@ -294,9 +294,9 @@ databaseChangeLog:
               - column:
                   name: time
                   value: 2021.10.26 17:55:32
-#              - column:
-#                  name: value
-#                  value: 1
+              - column:
+                  name: value
+                  value: 1
             rollback:
               - delete:
                   tableName: post_votes

@@ -4,6 +4,10 @@ import main.api.response.AllPostResponse;
 import main.api.response.CheckResponse;
 import main.api.response.PostResponse;
 import main.api.response.UserPostResponse;
+import main.model.Post;
+import main.model.PostComment;
+import main.repositories.PostRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -12,28 +16,46 @@ import java.util.List;
 @Service
 public class PostService {
 
+    @Autowired
+    private PostRepository postRepository;
 
-    public AllPostResponse getPost(){
-        PostResponse postResponse = new PostResponse();
+    private int count = 0;
+
+    public AllPostResponse getPost(Integer offset,
+                                   Integer limit,
+                                   String mode) {
+
         AllPostResponse allPostResponse = new AllPostResponse();
-        UserPostResponse userPostResponse = new UserPostResponse();
-        List<PostResponse> posts = new ArrayList<>();
+        List<PostResponse> postResponses = new ArrayList<>();
+        Iterable<Post> posts = postRepository.findAll();
 
-        userPostResponse.setId(1);
-        userPostResponse.setName("Ваня");
-        postResponse.setId(1);
-        postResponse.setAnnounce("Охуенно");
-        postResponse.setCommentCount(5);
-        postResponse.setTimestamp(125557441L);
-        postResponse.setLikeCount(5);
-        postResponse.setDislikeCount(1);
-        postResponse.setTitle("Говно");
-        postResponse.setViewCount(20);
-        postResponse.setUserPostResponse(postResponse.getUserPostResponse());
-        allPostResponse.setCount(1);
-        posts.add(postResponse);
-        allPostResponse.setPosts(posts);
+        for (Post post : posts) {
+            PostResponse postResponse = new PostResponse();
+            UserPostResponse userPostResponse = new UserPostResponse();
 
-        return allPostResponse;
-    }
+            userPostResponse.setId(post.getUser().getId());
+            userPostResponse.setName(post.getUser().getName());
+            postResponse.setId(post.getId());
+            postResponse.setAnnounce(post.getText());
+
+            postResponse.setCommentCount(5);
+            postResponse.setTimestamp(1565652L);
+
+            postResponse.setLikeCount(5);
+            postResponse.setDislikeCount(1);
+
+            postResponse.setTitle(post.getTitle());
+            postResponse.setViewCount(post.getViewCount());
+
+            postResponse.setUserPostResponse(userPostResponse);
+            postResponses.add(postResponse);
+            count = count++;
+        }
+
+            allPostResponse.setCount(postResponses.size());
+            allPostResponse.setPosts(postResponses);
+
+            return allPostResponse;
+        }
+
 }

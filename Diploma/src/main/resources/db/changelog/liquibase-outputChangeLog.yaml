@@ -1,2 +1,273 @@
-databaseChangeLog: []
+databaseChangeLog:
+- changeSet:
+    id: 1641319763793-1
+    author: your_liquibase_username (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+            name: id
+            type: INT
+        - column:
+            constraints:
+              nullable: false
+            name: time
+            type: datetime
+        - column:
+            constraints:
+              nullable: false
+            name: code
+            type: TINYTEXT
+        - column:
+            constraints:
+              nullable: false
+            name: secret_code
+            type: TINYTEXT
+        tableName: captcha_codes
+- changeSet:
+    id: 1641319763793-2
+    author: your_liquibase_username (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+            name: id
+            type: INT
+        - column:
+            constraints:
+              nullable: false
+            name: code
+            type: VARCHAR(250)
+        - column:
+            constraints:
+              nullable: false
+            name: name
+            type: VARCHAR(250)
+        - column:
+            constraints:
+              nullable: false
+            name: value
+            type: VARCHAR(250)
+        tableName: global_settings
+- changeSet:
+    id: 1641319763793-3
+    author: your_liquibase_username (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+            name: id
+            type: INT
+        - column:
+            name: parent_id
+            type: INT
+        - column:
+            constraints:
+              nullable: false
+            name: post_id
+            type: INT
+        - column:
+            constraints:
+              nullable: false
+            name: user_id
+            type: INT
+        - column:
+            constraints:
+              nullable: false
+            name: time
+            type: datetime
+        - column:
+            constraints:
+              nullable: false
+            name: text
+            type: TEXT
+        tableName: post_comments
+- changeSet:
+    id: 1641319763793-4
+    author: your_liquibase_username (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+            name: id
+            type: INT
+        - column:
+            constraints:
+              nullable: false
+            name: user_id
+            type: INT
+        - column:
+            constraints:
+              nullable: false
+            name: post_id
+            type: INT
+        - column:
+            constraints:
+              nullable: false
+            name: time
+            type: datetime
+        - column:
+            constraints:
+              nullable: false
+            name: value
+            type: TINYINT(3)
+        tableName: post_votes
+- changeSet:
+    id: 1641319763793-5
+    author: your_liquibase_username (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+            name: id
+            type: INT
+        - column:
+            constraints:
+              nullable: false
+            name: is_active
+            type: TINYINT(3)
+        - column:
+            constraints:
+              nullable: false
+            name: moderation_status
+            type: ENUM('DECLINED', 'ACCEPTED', 'NEW')
+        - column:
+            constraints:
+              nullable: false
+            name: moderator_id
+            type: INT
+        - column:
+            constraints:
+              nullable: false
+            name: user_id
+            type: TINYINT(3)
+        - column:
+            constraints:
+              nullable: false
+            name: time
+            type: datetime
+        - column:
+            constraints:
+              nullable: false
+            name: title
+            type: VARCHAR(250)
+        - column:
+            constraints:
+              nullable: false
+            name: text
+            type: TEXT
+        - column:
+            constraints:
+              nullable: false
+            name: view_count
+            type: INT
+        tableName: posts
+- changeSet:
+    id: 1641319763793-6
+    author: your_liquibase_username (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+            name: id
+            type: INT
+        - column:
+            constraints:
+              nullable: false
+            name: post_id
+            type: INT
+        - column:
+            constraints:
+              nullable: false
+            name: tag_id
+            type: INT
+        tableName: tag2posts
+- changeSet:
+    id: 1641319763793-7
+    author: your_liquibase_username (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+            name: id
+            type: INT
+        - column:
+            constraints:
+              nullable: false
+            name: name
+            type: VARCHAR(250)
+        tableName: tags
+- changeSet:
+    id: 1641319763793-8
+    author: your_liquibase_username (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+            name: id
+            type: INT
+        - column:
+            constraints:
+              nullable: false
+            name: is_moderator
+            type: TINYINT(3)
+        - column:
+            constraints:
+              nullable: false
+            name: reg_time
+            type: datetime
+        - column:
+            constraints:
+              nullable: false
+            name: name
+            type: VARCHAR(250)
+        - column:
+            constraints:
+              nullable: false
+            name: email
+            type: VARCHAR(250)
+        - column:
+            constraints:
+              nullable: false
+            name: password
+            type: VARCHAR(250)
+        - column:
+            name: code
+            type: VARCHAR(250)
+        - column:
+            name: photo
+            type: TEXT
+        tableName: users
 
