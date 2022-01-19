@@ -6,6 +6,7 @@ import main.repositories.PostRepository;
 import main.service.PostService;
 import main.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,14 +30,17 @@ public class ApiPostController {
 
     @GetMapping("post")
     public ResponseEntity<AllPostResponse> postResponse(@RequestParam Integer offset,
-                                                     @RequestParam Integer limit,
-                                                     @RequestParam String mode){
-        return ResponseEntity.ok(postService.getPost(offset, limit, mode));
+                                                        @RequestParam Integer limit,
+                                                        @RequestParam String mode){
+
+        return ResponseEntity.ok(postService.getPost(mode, PageRequest.of((int) offset / limit, limit)));
+//        return new ResponseEntity<>(postService.getPost(offset,limit,mode,PageRequest.of((int) offset / limit, limit)), HttpStatus.OK);
+
     }
 
 
     @GetMapping("tag")
-    public ResponseEntity<TagListResponse> tagResponse(){
-        return ResponseEntity.ok(tagService.getTags());
+    public ResponseEntity<TagListResponse> tagResponse(String query){
+        return ResponseEntity.ok(tagService.getTags(query));
         }
 }

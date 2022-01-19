@@ -23,7 +23,7 @@ public class PostComment {
     private User user;
 
     @Column(nullable = false)
-    private LocalDateTime regTime;
+    private LocalDateTime time;
 
     @Column(nullable = false)
     private String text;
@@ -61,11 +61,11 @@ public class PostComment {
     }
 
     public LocalDateTime getRegTime() {
-        return regTime;
+        return time;
     }
 
     public void setRegTime(LocalDateTime regTime) {
-        this.regTime = regTime;
+        this.time = regTime;
     }
 
     public String getText() {

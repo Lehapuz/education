@@ -4,7 +4,7 @@ public class PostResponse {
 
     private Integer id;
     private Long timestamp;
-    private UserPostResponse userPostResponse;
+    private UserPostResponse user;
     private String title;
     private String announce;
     private Integer likeCount;
@@ -29,12 +29,12 @@ public class PostResponse {
         this.timestamp = timestamp;
     }
 
-    public UserPostResponse getUserPostResponse() {
-        return userPostResponse;
+    public UserPostResponse getUser() {
+        return user;
     }
 
-    public void setUserPostResponse(UserPostResponse userPostResponse) {
-        this.userPostResponse = userPostResponse;
+    public void setUser (UserPostResponse user) {
+        this.user = user;
     }
 
     public String getTitle() {
@@ -84,4 +84,5 @@ public class PostResponse {
     public void setViewCount(Integer viewCount) {
         this.viewCount = viewCount;
     }
+
 }
