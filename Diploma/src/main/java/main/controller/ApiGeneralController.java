@@ -2,9 +2,7 @@ package main.controller;
 
 import main.api.response.InitResponse;
 import main.api.response.SettingsResponse;
-import main.model.GlobalSetting;
-import main.repositories.GlobalSettingRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import main.service.SettingService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,12 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class ApiGeneralController {
 
     private final InitResponse initResponse;
-    @Autowired
-    private GlobalSettingRepository globalSettingRepository;
+    private final SettingService settingService;
 
-
-    public ApiGeneralController(InitResponse initResponse) {
+    public ApiGeneralController(InitResponse initResponse, SettingService settingService) {
         this.initResponse = initResponse;
+        this.settingService = settingService;
     }
 
 
@@ -31,19 +28,6 @@ public class ApiGeneralController {
 
     @GetMapping("settings")
     public ResponseEntity<SettingsResponse> settingResponse() {
-        Iterable<GlobalSetting> globalSettingIterable = globalSettingRepository.findAll();
-        SettingsResponse settingsResponse = new SettingsResponse();
-        for (GlobalSetting globalSetting : globalSettingIterable) {
-            if (globalSetting.getId() == 1) {
-                settingsResponse.setMultiuserMode(globalSetting.getValue().name().equals("YES"));
-            }
-            if (globalSetting.getId() == 2) {
-                settingsResponse.setPostPremoderation(globalSetting.getValue().name().equals("YES"));
-            }
-            if (globalSetting.getId() == 3) {
-                settingsResponse.setStatisticsIsPublic(globalSetting.getValue().name().equals("YES"));
-            }
-        }
-        return ResponseEntity.ok(settingsResponse);
+        return ResponseEntity.ok(settingService.getSettings());
     }
 }

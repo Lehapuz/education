@@ -463,6 +463,192 @@ databaseChangeLog:
               - column:
                   name: view_count
                   value: 195
+  - changeSet:
+      id: 53
+      author: aliaksei_basavets
+      changes:
+        - insert:
+            tableName: posts
+            columns:
+              - column:
+                  name: is_active
+                  value: 1
+              - column:
+                  name: moderation_status
+                  value: ACCEPTED
+              - column:
+                  name: moderator_id
+                  value: 1
+              - column:
+                  name: user_id
+                  value: 4
+              - column:
+                  name: time
+                  value: 2021.11.12 18:19:55
+              - column:
+                  name: title
+                  value: Пост №9
+              - column:
+                  name: text
+                  value: Пост обо всем хорошем и не только
+              - column:
+                  name: view_count
+                  value: 104
+  - changeSet:
+      id: 54
+      author: aliaksei_basavets
+      changes:
+        - insert:
+            tableName: posts
+            columns:
+              - column:
+                  name: is_active
+                  value: 1
+              - column:
+                  name: moderation_status
+                  value: ACCEPTED
+              - column:
+                  name: moderator_id
+                  value: 1
+              - column:
+                  name: user_id
+                  value: 3
+              - column:
+                  name: time
+                  value: 2021.11.12 18:19:55
+              - column:
+                  name: title
+                  value: Пост №10
+              - column:
+                  name: text
+                  value: Пост про Сибирских Котов
+              - column:
+                  name: view_count
+                  value: 10
+  - changeSet:
+      id: 55
+      author: aliaksei_basavets
+      changes:
+        - insert:
+            tableName: posts
+            columns:
+              - column:
+                  name: is_active
+                  value: 1
+              - column:
+                  name: moderation_status
+                  value: ACCEPTED
+              - column:
+                  name: moderator_id
+                  value: 1
+              - column:
+                  name: user_id
+                  value: 2
+              - column:
+                  name: time
+                  value: 2019.05.05 18:19:55
+              - column:
+                  name: title
+                  value: Пост №11
+              - column:
+                  name: text
+                  value: Пост о программировании
+              - column:
+                  name: view_count
+                  value: 88
+  - changeSet:
+      id: 56
+      author: aliaksei_basavets
+      changes:
+        - insert:
+            tableName: posts
+            columns:
+              - column:
+                  name: is_active
+                  value: 1
+              - column:
+                  name: moderation_status
+                  value: ACCEPTED
+              - column:
+                  name: moderator_id
+                  value: 1
+              - column:
+                  name: user_id
+                  value: 1
+              - column:
+                  name: time
+                  value: 2020.05.05 18:19:55
+              - column:
+                  name: title
+                  value: Пост №12
+              - column:
+                  name: text
+                  value: Пост о жизни
+              - column:
+                  name: view_count
+                  value: 59
+  - changeSet:
+      id: 57
+      author: aliaksei_basavets
+      changes:
+        - insert:
+            tableName: posts
+            columns:
+              - column:
+                  name: is_active
+                  value: 1
+              - column:
+                  name: moderation_status
+                  value: ACCEPTED
+              - column:
+                  name: moderator_id
+                  value: 1
+              - column:
+                  name: user_id
+                  value: 1
+              - column:
+                  name: time
+                  value: 2021.04.04 18:19:55
+              - column:
+                  name: title
+                  value: Пост №13
+              - column:
+                  name: text
+                  value: Пост о красивой жизни
+              - column:
+                  name: view_count
+                  value: 84
+  - changeSet:
+      id: 58
+      author: aliaksei_basavets
+      changes:
+        - insert:
+            tableName: posts
+            columns:
+              - column:
+                  name: is_active
+                  value: 1
+              - column:
+                  name: moderation_status
+                  value: ACCEPTED
+              - column:
+                  name: moderator_id
+                  value: 1
+              - column:
+                  name: user_id
+                  value: 2
+              - column:
+                  name: time
+                  value: 2021.08.12 18:19:55
+              - column:
+                  name: title
+                  value: Пост №14
+              - column:
+                  name: text
+                  value: Пост о компютерах
+              - column:
+                  name: view_count
+                  value: 11
       rollback:
         - delete:
             tableName: posts
@@ -672,10 +858,124 @@ databaseChangeLog:
               - column:
                   name: value
                   value: -1
-            rollback:
-              - delete:
-                  tableName: post_votes
-                  where: postvoteid in ('1', '2')
+  - changeSet:
+      id: 59
+      author: aliaksei_basavets
+      changes:
+        - insert:
+            tableName: post_votes
+            columns:
+              - column:
+                  name: user_id
+                  value: 3
+              - column:
+                  name: post_id
+                  value: 13
+              - column:
+                  name: time
+                  value: 2020.05.11 17:55:32
+              - column:
+                  name: value
+                  value: 1
+  - changeSet:
+      id: 60
+      author: aliaksei_basavets
+      changes:
+        - insert:
+            tableName: post_votes
+            columns:
+              - column:
+                  name: user_id
+                  value: 4
+              - column:
+                  name: post_id
+                  value: 13
+              - column:
+                  name: time
+                  value: 2021.07.11 17:55:32
+              - column:
+                  name: value
+                  value: 1
+  - changeSet:
+      id: 61
+      author: aliaksei_basavets
+      changes:
+        - insert:
+            tableName: post_votes
+            columns:
+              - column:
+                  name: user_id
+                  value: 3
+              - column:
+                  name: post_id
+                  value: 13
+              - column:
+                  name: time
+                  value: 2021.09.11 17:55:32
+              - column:
+                  name: value
+                  value: 1
+  - changeSet:
+      id: 62
+      author: aliaksei_basavets
+      changes:
+        - insert:
+            tableName: post_votes
+            columns:
+              - column:
+                  name: user_id
+                  value: 2
+              - column:
+                  name: post_id
+                  value: 14
+              - column:
+                  name: time
+                  value: 2021.07.11 17:55:32
+              - column:
+                  name: value
+                  value: 1
+  - changeSet:
+      id: 63
+      author: aliaksei_basavets
+      changes:
+        - insert:
+            tableName: post_votes
+            columns:
+              - column:
+                  name: user_id
+                  value: 2
+              - column:
+                  name: post_id
+                  value: 12
+              - column:
+                  name: time
+                  value: 2021.07.11 17:55:32
+              - column:
+                  name: value
+                  value: -1
+  - changeSet:
+      id: 64
+      author: aliaksei_basavets
+      changes:
+        - insert:
+            tableName: post_votes
+            columns:
+              - column:
+                  name: user_id
+                  value: 2
+              - column:
+                  name: post_id
+                  value: 10
+              - column:
+                  name: time
+                  value: 2021.08.11 17:55:32
+              - column:
+                  name: value
+                  value: 1
+      rollback:
+        - delete:
+            tableName: post_votes
+            where: postvoteid in ('1', '2')
   - changeSet:
       id: 10
       author: aliaksei_basavets
@@ -735,6 +1035,16 @@ databaseChangeLog:
               - column:
                   name: name
                   value: языках
+  - changeSet:
+      id: 72
+      author: aliaksei_basavets
+      changes:
+        - insert:
+            tableName: tags
+            columns:
+              - column:
+                  name: name
+                  value: жизни
       rollback:
         - delete:
             tableName: tags
@@ -1076,6 +1386,160 @@ databaseChangeLog:
               - column:
                   name: text
                   value: Безобразный комментарий
+  - changeSet:
+      id: 65
+      author: aliaksei_basavets
+      changes:
+        - insert:
+            tableName: post_comments
+            columns:
+              - column:
+                  name: parent_id
+                  value:
+              - column:
+                  name: post_id
+                  value: 14
+              - column:
+                  name: user_id
+                  value: 3
+              - column:
+                  name: time
+                  value: 2020.10.01 18:19:55
+              - column:
+                  name: text
+                  value: Крутой комментарий
+  - changeSet:
+      id: 66
+      author: aliaksei_basavets
+      changes:
+        - insert:
+            tableName: post_comments
+            columns:
+              - column:
+                  name: parent_id
+                  value:
+              - column:
+                  name: post_id
+                  value: 14
+              - column:
+                  name: user_id
+                  value: 1
+              - column:
+                  name: time
+                  value: 2021.05.01 18:19:55
+              - column:
+                  name: text
+                  value: Крутой комментарий еще
+  - changeSet:
+      id: 67
+      author: aliaksei_basavets
+      changes:
+        - insert:
+            tableName: post_comments
+            columns:
+              - column:
+                  name: parent_id
+                  value:
+              - column:
+                  name: post_id
+                  value: 14
+              - column:
+                  name: user_id
+                  value: 2
+              - column:
+                  name: time
+                  value: 2020.08.01 18:19:55
+              - column:
+                  name: text
+                  value: Крутой комментарий снова
+  - changeSet:
+      id: 68
+      author: aliaksei_basavets
+      changes:
+        - insert:
+            tableName: post_comments
+            columns:
+              - column:
+                  name: parent_id
+                  value:
+              - column:
+                  name: post_id
+                  value: 14
+              - column:
+                  name: user_id
+                  value: 3
+              - column:
+                  name: time
+                  value: 2020.10.01 18:19:55
+              - column:
+                  name: text
+                  value: Найкрутейший комментарий
+  - changeSet:
+      id: 69
+      author: aliaksei_basavets
+      changes:
+        - insert:
+            tableName: post_comments
+            columns:
+              - column:
+                  name: parent_id
+                  value:
+              - column:
+                  name: post_id
+                  value: 14
+              - column:
+                  name: user_id
+                  value: 2
+              - column:
+                  name: time
+                  value: 2020.01.01 18:19:55
+              - column:
+                  name: text
+                  value: Некрутой комментарий
+  - changeSet:
+      id: 70
+      author: aliaksei_basavets
+      changes:
+        - insert:
+            tableName: post_comments
+            columns:
+              - column:
+                  name: parent_id
+                  value:
+              - column:
+                  name: post_id
+                  value: 13
+              - column:
+                  name: user_id
+                  value: 3
+              - column:
+                  name: time
+                  value: 2020.09.01 18:19:55
+              - column:
+                  name: text
+                  value: Опять комментарий
+  - changeSet:
+      id: 71
+      author: aliaksei_basavets
+      changes:
+        - insert:
+            tableName: post_comments
+            columns:
+              - column:
+                  name: parent_id
+                  value:
+              - column:
+                  name: post_id
+                  value: 11
+              - column:
+                  name: user_id
+                  value: 1
+              - column:
+                  name: time
+                  value: 2020.07.01 18:19:55
+              - column:
+                  name: text
+                  value: Новый комментарий
       rollback:
         - delete:
             tableName: post_comments
@@ -1215,7 +1679,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: code
-                  value: STATICS_IS_PUBLIC
+                  value: STATISTICS_IS_PUBLIC
               - column:
                   name: name
                   value: Показывать всем статистику блога

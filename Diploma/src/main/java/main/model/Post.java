@@ -2,6 +2,7 @@ package main.model;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "posts")
@@ -37,6 +38,12 @@ public class Post {
 
     @Column(name = "view_count", nullable = false)
     private Integer viewCount;
+
+    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
+    private List<PostComment> postComments;
+
+    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
+    private List<PostVotes> postVotesList;
 
     public Integer getId() {
         return id;
@@ -108,5 +115,21 @@ public class Post {
 
     public void setViewCount(Integer viewCount) {
         this.viewCount = viewCount;
+    }
+
+    public List<PostComment> getPostComments() {
+        return postComments;
+    }
+
+    public void setPostComments(List<PostComment> postComments) {
+        this.postComments = postComments;
+    }
+
+    public List<PostVotes> getPostVotesList() {
+        return postVotesList;
+    }
+
+    public void setPostVotesList(List<PostVotes> postVotesList) {
+        this.postVotesList = postVotesList;
     }
 }

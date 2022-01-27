@@ -2,10 +2,8 @@ package main.controller;
 
 import main.api.response.AllPostResponse;
 import main.api.response.TagListResponse;
-import main.repositories.PostRepository;
 import main.service.PostService;
 import main.service.TagService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,9 +18,6 @@ public class ApiPostController {
     private final PostService postService;
     private final TagService tagService;
 
-    @Autowired
-    private PostRepository postRepository;
-
     public ApiPostController(PostService postService, TagService tagService) {
         this.postService = postService;
         this.tagService = tagService;
@@ -31,16 +26,15 @@ public class ApiPostController {
     @GetMapping("post")
     public ResponseEntity<AllPostResponse> postResponse(@RequestParam Integer offset,
                                                         @RequestParam Integer limit,
-                                                        @RequestParam String mode){
+                                                        @RequestParam String mode) {
 
-        return ResponseEntity.ok(postService.getPost(mode, PageRequest.of((int) offset / limit, limit)));
+        return ResponseEntity.ok(postService.getPost(mode, PageRequest.of(offset / limit, limit)));
 //        return new ResponseEntity<>(postService.getPost(offset,limit,mode,PageRequest.of((int) offset / limit, limit)), HttpStatus.OK);
-
     }
 
 
     @GetMapping("tag")
-    public ResponseEntity<TagListResponse> tagResponse(String query){
+    public ResponseEntity<TagListResponse> tagResponse(@RequestParam(required = false) String query) {
         return ResponseEntity.ok(tagService.getTags(query));
-        }
+    }
 }

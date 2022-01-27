@@ -18,14 +18,20 @@ import java.util.List;
 public class TagService {
 
     @Autowired
-    private TagRepository tagRepository;
+    private final TagRepository tagRepository;
     @Autowired
-    private PostRepository postRepository;
+    private final PostRepository postRepository;
 
-    TagListResponse tagListResponse = new TagListResponse();
+
+
+    public TagService(TagRepository tagRepository, PostRepository postRepository) {
+        this.tagRepository = tagRepository;
+        this.postRepository = postRepository;
+    }
 
     public TagListResponse getTags(String query) {
 
+        TagListResponse tagListResponse = new TagListResponse();
         Iterable<Tag> tags = tagRepository.findAll();
         Iterable<Post> posts = postRepository.findAll();
         List<TagResponse> tagList = new ArrayList<>();
@@ -59,7 +65,7 @@ public class TagService {
         Iterable<Post> iterablePosts = postRepository.findAll();
         Iterable<Tag> iterableTags = tagRepository.findAll();
         List<Double> weights = new ArrayList<>();
-        double k;
+        double normalizeCoefficient;
         for (Tag tag : iterableTags) {
             double frequency = 0.0;
             posts.clear();
@@ -75,8 +81,8 @@ public class TagService {
             weights.add(tagWeight);
         }
         weights.sort(Comparator.comparingDouble(Double::doubleValue));
-        k = 1 / weights.get(weights.size() - 1);
+        normalizeCoefficient = 1 / weights.get(weights.size() - 1);
 
-        return k;
+        return normalizeCoefficient;
     }
 }
