@@ -1,15 +1,14 @@
 package main.controller;
 
 import main.api.response.AllPostResponse;
+import main.api.response.CalendarResponse;
+import main.api.response.IdPostResponse;
 import main.api.response.TagListResponse;
 import main.service.PostService;
 import main.service.TagService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/")
@@ -22,6 +21,7 @@ public class ApiPostController {
         this.postService = postService;
         this.tagService = tagService;
     }
+
 
     @GetMapping("post")
     public ResponseEntity<AllPostResponse> postResponse(@RequestParam Integer offset,
@@ -36,5 +36,41 @@ public class ApiPostController {
     @GetMapping("tag")
     public ResponseEntity<TagListResponse> tagResponse(@RequestParam(required = false) String query) {
         return ResponseEntity.ok(tagService.getTags(query));
+    }
+
+
+    @GetMapping("post/search")
+    public ResponseEntity<AllPostResponse> postBySearchResponse(@RequestParam Integer offset,
+                                                                @RequestParam Integer limit,
+                                                                @RequestParam String query) {
+        return ResponseEntity.ok(postService.getPostBySearch(query, PageRequest.of(offset / limit, limit)));
+    }
+
+
+    @GetMapping("calendar")
+    public ResponseEntity<CalendarResponse> postByYearResponse(@RequestParam(required = false) Integer year) {
+        return ResponseEntity.ok(postService.getPostByYear(year));
+    }
+
+
+    @GetMapping("post/byDate")
+    public ResponseEntity<AllPostResponse> postByDateResponse(@RequestParam Integer offset,
+                                                              @RequestParam Integer limit,
+                                                              @RequestParam String date) {
+        return ResponseEntity.ok(postService.getPostByDate(date, PageRequest.of(offset / limit, limit)));
+    }
+
+
+    @GetMapping("post/byTag")
+    public ResponseEntity<AllPostResponse> postByTagResponse(@RequestParam Integer offset,
+                                                             @RequestParam Integer limit,
+                                                             @RequestParam String tag) {
+        return ResponseEntity.ok(postService.getPostByTag(tag, PageRequest.of(offset / limit, limit)));
+    }
+
+
+    @GetMapping("post/{id}")
+    public ResponseEntity<IdPostResponse> postByIdResponse(@PathVariable int id) {
+        return ResponseEntity.ok(postService.getPostById(id));
     }
 }

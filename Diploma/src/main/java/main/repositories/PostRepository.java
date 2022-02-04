@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface PostRepository extends CrudRepository<Post, Integer> {
 
@@ -35,4 +37,27 @@ public interface PostRepository extends CrudRepository<Post, Integer> {
             "AND p.moderationStatus = 'ACCEPTED' " +
             "GROUP BY p.id ORDER BY COUNT(pc.id) DESC")
     Page<Post> findPopularPosts(Pageable pageable);
+
+
+    @Query("SELECT p FROM Post p WHERE p.time < NOW() AND p.isActive = 1 " +
+            "AND p.moderationStatus = 'ACCEPTED' " +
+            "AND (title LIKE %:query%) ORDER BY time DESC ")
+    Page<Post> findPostsBySearch(String query, Pageable pageable);
+
+
+    @Query("SELECT p FROM Post p WHERE p.time < NOW() AND p.isActive = 1 " +
+            "AND p.moderationStatus = 'ACCEPTED' ORDER BY time DESC")
+    List<Post> findPostsByYear();
+
+
+    @Query("SELECT p FROM Post p WHERE DATE(time) = DATE(:date) AND p.isActive = 1 " +
+            "AND p.moderationStatus = 'ACCEPTED' ORDER BY time DESC")
+    Page<Post> findPostByDate(String date, Pageable pageable);
+
+
+    @Query("SELECT p FROM Post p " +
+            "WHERE p.time < NOW() AND p.isActive = 1 " +
+            "AND p.moderationStatus = 'ACCEPTED' " +
+            "AND (text LIKE %:tag%) ORDER BY time DESC ")
+    Page<Post> findPostsByTag(String tag, Pageable pageable);
 }

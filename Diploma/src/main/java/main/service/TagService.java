@@ -7,7 +7,6 @@ import main.model.Post;
 import main.model.Tag;
 import main.repositories.PostRepository;
 import main.repositories.TagRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,11 +16,8 @@ import java.util.List;
 @Service
 public class TagService {
 
-    @Autowired
     private final TagRepository tagRepository;
-    @Autowired
     private final PostRepository postRepository;
-
 
 
     public TagService(TagRepository tagRepository, PostRepository postRepository) {

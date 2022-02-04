@@ -45,6 +45,13 @@ public class Post {
     @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
     private List<PostVotes> postVotesList;
 
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "tag2posts",
+            joinColumns = {@JoinColumn(name = "post_id")},
+            inverseJoinColumns = {@JoinColumn(name = "tag_id")}
+    )
+    private List<Tag> tags;
+
     public Integer getId() {
         return id;
     }
@@ -131,5 +138,13 @@ public class Post {
 
     public void setPostVotesList(List<PostVotes> postVotesList) {
         this.postVotesList = postVotesList;
+    }
+
+    public List<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
     }
 }
