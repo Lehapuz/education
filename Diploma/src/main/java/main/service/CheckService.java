@@ -9,6 +9,7 @@ public class CheckService {
     public CheckResponse getCheck(){
         CheckResponse checkResponse = new CheckResponse();
         checkResponse.setResult(false);
+        //checkResponse.setUser(null);
         return checkResponse;
     }
 }

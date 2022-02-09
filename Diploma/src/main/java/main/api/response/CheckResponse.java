@@ -4,7 +4,7 @@ public class CheckResponse {
 
     private Boolean result;
 
-    private AuthCheckResponse authCheckResponse;
+    //private AuthCheckResponse user;
 
 
     public Boolean getResult() {
@@ -15,11 +15,11 @@ public class CheckResponse {
         this.result = result;
     }
 
-    public AuthCheckResponse getAuthCheckResponse() {
-        return authCheckResponse;
-    }
-
-    public void setAuthCheckResponse(AuthCheckResponse authCheckResponse) {
-        this.authCheckResponse = authCheckResponse;
-    }
+//    public AuthCheckResponse getUser() {
+//        return user;
+//    }
+//
+//    public void setUser(AuthCheckResponse user) {
+//        this.user = user;
+//    }
 }
