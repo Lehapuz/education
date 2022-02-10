@@ -20,16 +20,14 @@ public class SettingService {
         SettingsResponse settingsResponse = new SettingsResponse();
 
         for (GlobalSetting globalSetting : globalSettingIterable) {
-            if (globalSetting.getCode().equals("MULTIUSER_MODE")) {
-                settingsResponse.setMultiuserMode(globalSetting.getValue().name());
+            if (globalSetting.getCode().equals("MULTIUSER_MODE") && globalSetting.getValue().name().equals("YES")) {
+                    settingsResponse.setMultiuserMode(true);
             }
-
-            if (globalSetting.getCode().equals("POST_PREMODERATION")) {
-                settingsResponse.setPostPremoderation(globalSetting.getValue().name());
+            if (globalSetting.getCode().equals("POST_PREMODERATION") && globalSetting.getValue().name().equals("YES")) {
+                    settingsResponse.setPostPremoderation(true);
             }
-
-            if (globalSetting.getCode().equals("STATISTICS_IS_PUBLIC")) {
-                settingsResponse.setStatisticsIsPublic(globalSetting.getValue().name());
+            if (globalSetting.getCode().equals("STATISTICS_IS_PUBLIC") && globalSetting.getValue().name().equals("YES")) {
+                    settingsResponse.setStatisticsIsPublic(true);
             }
         }
         return settingsResponse;

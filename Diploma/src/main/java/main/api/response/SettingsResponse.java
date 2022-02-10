@@ -1,33 +1,37 @@
 package main.api.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class SettingsResponse {
 
-    private String multiuserMode;
-    private String postPremoderation;
-    private String statisticsIsPublic;
+    @JsonProperty("MULTIUSER_MODE")
+    private boolean multiuserMode;
+    @JsonProperty("POST_PREMODERATION")
+    private boolean postPremoderation;
+    @JsonProperty("STATISTICS_IS_PUBLIC")
+    private boolean statisticsIsPublic;
 
-
-    public String getMultiuserMode() {
+    public boolean getMultiuserMode() {
         return multiuserMode;
     }
 
-    public void setMultiuserMode(String multiuserMode) {
+    public void setMultiuserMode(boolean multiuserMode) {
         this.multiuserMode = multiuserMode;
     }
 
-    public String getPostPremoderation() {
+    public boolean getPostPremoderation() {
         return postPremoderation;
     }
 
-    public void setPostPremoderation(String postPremoderation) {
+    public void setPostPremoderation(boolean postPremoderation) {
         this.postPremoderation = postPremoderation;
     }
 
-    public String getStatisticsIsPublic() {
+    public boolean getStatisticsIsPublic() {
         return statisticsIsPublic;
     }
 
-    public void setStatisticsIsPublic(String statisticsIsPublic) {
+    public void setStatisticsIsPublic(boolean statisticsIsPublic) {
         this.statisticsIsPublic = statisticsIsPublic;
     }
 }

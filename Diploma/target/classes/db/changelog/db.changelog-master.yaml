@@ -1718,7 +1718,7 @@ databaseChangeLog:
                   value: Многопользовательский режим
               - column:
                   name: value
-                  value: "NO"
+                  value: "YES"
   - changeSet:
       id: 24
       author: aliaksei_basavets

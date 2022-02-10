@@ -53,8 +53,8 @@ public class UserService {
             registerResponse.setResult(false);
             registerResponse.setErrors(registerErrorResponse);
         }
-
-        if (captchaCodeRepository.findBySecretCode(captchaCode.getSecretCode()).isEmpty()) {
+        if (captchaCodeRepository.findBySecretCode(captchaCode.getSecretCode()).isEmpty() &&
+        captchaCodeRepository.findByCode(captchaCode.getCode()).isEmpty()) {
             registerErrorResponse.setCaptcha("Код с картинки введен неверно");
             registerResponse.setResult(false);
             registerResponse.setErrors(registerErrorResponse);
