@@ -1,5 +1,6 @@
 package main.repositories;
 
+import main.model.ModerationStatus;
 import main.model.Post;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -60,4 +61,8 @@ public interface PostRepository extends CrudRepository<Post, Integer> {
             "AND p.moderationStatus = 'ACCEPTED' " +
             "AND (text LIKE %:tag%) ORDER BY time DESC ")
     Page<Post> findPostsByTag(String tag, Pageable pageable);
+
+
+    @Query("SELECT p FROM Post p WHERE p.isActive = 1 AND p.moderationStatus = 'NEW'")
+    Page<Post> findPostForModeration(ModerationStatus status, Pageable pageable);
 }

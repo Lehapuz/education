@@ -1,7 +1,5 @@
 package main.api.response;
 
-import main.model.Tag;
-
 import java.util.List;
 
 public class IdPostResponse {
