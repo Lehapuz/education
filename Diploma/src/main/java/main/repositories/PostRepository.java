@@ -65,4 +65,8 @@ public interface PostRepository extends CrudRepository<Post, Integer> {
 
     @Query("SELECT p FROM Post p WHERE p.isActive = 1 AND p.moderationStatus = 'NEW'")
     Page<Post> findPostForModeration(ModerationStatus status, Pageable pageable);
+
+
+    @Query("SELECT p FROM Post p WHERE (p.isActive = :active AND p.moderationStatus = :status AND p.user.id = :id)")
+    Page<Post> findMyPosts(int id, ModerationStatus status, int active, Pageable pageable);
 }

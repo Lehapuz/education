@@ -4,10 +4,12 @@ import main.api.response.AllPostResponse;
 import main.api.response.CalendarResponse;
 import main.api.response.IdPostResponse;
 import main.api.response.TagListResponse;
+import main.model.PostModerationStatus;
 import main.service.PostService;
 import main.service.TagService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -72,5 +74,14 @@ public class ApiPostController {
     @GetMapping("post/{id}")
     public ResponseEntity<IdPostResponse> postByIdResponse(@PathVariable int id) {
         return ResponseEntity.ok(postService.getPostById(id));
+    }
+
+
+    @GetMapping("post/my")
+    @PreAuthorize("hasAuthority('user:write')")
+    public ResponseEntity<AllPostResponse> findMyPostsResponse(@RequestParam Integer offset,
+                                                               @RequestParam Integer limit,
+                                                               @RequestParam PostModerationStatus status) {
+        return ResponseEntity.ok(postService.findMyPosts(status, PageRequest.of((int) offset / limit, limit)));
     }
 }

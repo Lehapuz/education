@@ -21,6 +21,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 
 
@@ -71,37 +72,35 @@ public class UserService {
             registerResponse.setResult(false);
             registerResponse.setErrors(registerErrorResponse);
         }
-        if (captchaCodeRepository.findBySecretCode(captchaCode.getSecretCode()).isEmpty() &&
-                captchaCodeRepository.findByCode(captchaCode.getCode()).isEmpty()) {
+        if (!registrationRequest.getCaptcha().equals(captchaCodeRepository
+                .findBySecretCode(registrationRequest.getCaptchaSecret()).get().getCode())) {
             registerErrorResponse.setCaptcha("Код с картинки введен неверно");
             registerResponse.setResult(false);
             registerResponse.setErrors(registerErrorResponse);
         }
-
         if (registerResponse.isResult()) {
             userRepository.save(user);
         }
         return registerResponse;
     }
 
+
     public LoginResponse loginResponse(LoginRequest loginRequest) {
-        Authentication auth = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginRequest.getEmail(),
-                        loginRequest.getPassword()));
-        SecurityContextHolder.getContext().setAuthentication(auth);
+        try {
+            Authentication auth = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            loginRequest.getEmail(),
+                            loginRequest.getPassword()));
+            SecurityContextHolder.getContext().setAuthentication(auth);
 
-        org.springframework.security.core.userdetails.User user
-                = (org.springframework.security.core.userdetails.User) auth.getPrincipal();
+            org.springframework.security.core.userdetails.User user
+                    = (org.springframework.security.core.userdetails.User) auth.getPrincipal();
 
-        User currentUser = userRepository.findByEmail(user.getUsername())
-                .orElseThrow(() -> new UsernameNotFoundException(user.getUsername()));
+            User currentUser = userRepository.findByEmail(user.getUsername())
+                    .orElseThrow(() -> new UsernameNotFoundException(user.getUsername()));
 
-        LoginResponse loginResponse = new LoginResponse();
+            LoginResponse loginResponse = new LoginResponse();
 
-        if (currentUser == null) {
-            loginResponse.setResult(false);
-        } else {
             UserLoginResponse userLoginResponse = new UserLoginResponse();
             userLoginResponse.setEmail(currentUser.getEmail());
             userLoginResponse.setModeration(currentUser.getIsModerator() == 1);
@@ -113,9 +112,14 @@ public class UserService {
 
             loginResponse.setResult(true);
             loginResponse.setUser(userLoginResponse);
+
+            return loginResponse;
+
+        } catch (Exception e) {
+            return new LoginResponse();
         }
-        return loginResponse;
     }
+
 
     private int moderationPostCount(boolean isModerator) {
         if (!isModerator) return 0;
@@ -124,9 +128,38 @@ public class UserService {
                 .getTotalElements();
     }
 
+
     public LoginResponse logout() {
         LoginResponse response = new LoginResponse();
         response.setResult(true);
+        return response;
+    }
+
+
+    public LoginResponse checkUser(Principal principal) {
+        LoginResponse response = new LoginResponse();
+
+        if (principal == null) {
+            return new LoginResponse();
+        }
+
+        User currentUser = userRepository.findByEmail(principal.getName())
+                .orElseThrow(() -> new UsernameNotFoundException(principal.getName()));
+
+        LoginResponse loginResponse = new LoginResponse();
+
+        UserLoginResponse userLoginResponse = new UserLoginResponse();
+        userLoginResponse.setEmail(currentUser.getEmail());
+        userLoginResponse.setModeration(currentUser.getIsModerator() == 1);
+        userLoginResponse.setId(currentUser.getId());
+        userLoginResponse.setName(currentUser.getName());
+        userLoginResponse.setPhoto(currentUser.getPhoto());
+        userLoginResponse.setModerationCount(moderationPostCount(userLoginResponse.isModeration()));
+        userLoginResponse.setSettings(userLoginResponse.isModeration());
+
+        loginResponse.setResult(true);
+        loginResponse.setUser(userLoginResponse);
+
         return response;
     }
 }

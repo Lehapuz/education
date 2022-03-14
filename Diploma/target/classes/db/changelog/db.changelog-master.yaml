@@ -649,6 +649,37 @@ databaseChangeLog:
               - column:
                   name: view_count
                   value: 11
+  - changeSet:
+      id: 78
+      author: aliaksei_basavets
+      changes:
+        - insert:
+            tableName: posts
+            columns:
+              - column:
+                  name: is_active
+                  value: 1
+              - column:
+                  name: moderation_status
+                  value: ACCEPTED
+              - column:
+                  name: moderator_id
+                  value: 1
+              - column:
+                  name: user_id
+                  value: 15
+              - column:
+                  name: time
+                  value: 2022.03.13 17:19:55
+              - column:
+                  name: title
+                  value: Пост Лехи
+              - column:
+                  name: text
+                  value: Пост о жизни
+              - column:
+                  name: view_count
+                  value: 10
       rollback:
         - delete:
             tableName: posts

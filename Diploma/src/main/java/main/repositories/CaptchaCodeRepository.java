@@ -19,5 +19,4 @@ public interface CaptchaCodeRepository extends CrudRepository<CaptchaCode, Integ
     void deleteLessThanTime(LocalDateTime time);
 
     Optional<CaptchaCode> findBySecretCode(String secretCode);
-    Optional<CaptchaCode> findByCode(String code);
 }

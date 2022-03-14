@@ -1,13 +1,13 @@
 package main.service;
 
 import main.api.response.*;
-import main.model.Post;
-import main.model.PostComment;
-import main.model.PostVotes;
-import main.model.Tag;
+import main.model.*;
 import main.repositories.PostRepository;
+import main.repositories.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.ZoneOffset;
@@ -18,9 +18,11 @@ import java.util.*;
 public class PostService {
 
     private final PostRepository postRepository;
+    private final UserRepository userRepository;
 
-    public PostService(PostRepository postRepository) {
+    public PostService(PostRepository postRepository, UserRepository userRepository) {
         this.postRepository = postRepository;
+        this.userRepository = userRepository;
     }
 
 
@@ -302,7 +304,7 @@ public class PostService {
 
             idPostResponse.setViewCount(post.get().getViewCount());
 
-            for (PostComment postComment : post.get().getPostComments()){
+            for (PostComment postComment : post.get().getPostComments()) {
                 CommentResponse commentResponse = new CommentResponse();
                 UserPostCommentsResponse userPostCommentsResponse = new UserPostCommentsResponse();
                 commentResponse.setId(postComment.getId());
@@ -317,7 +319,7 @@ public class PostService {
             }
             idPostResponse.setComments(commentResponseList);
 
-            for (Tag tag : post.get().getTags()){
+            for (Tag tag : post.get().getTags()) {
                 tagList.add(tag.getName());
             }
             idPostResponse.setTags(tagList);
@@ -328,6 +330,66 @@ public class PostService {
         }
 
         return idPostResponse;
+    }
+
+    public AllPostResponse findMyPosts(PostModerationStatus status, Pageable pageable) {
+
+        AllPostResponse allPostResponse = new AllPostResponse();
+        List<PostResponse> postResponses = new ArrayList<>();
+
+        org.springframework.security.core.userdetails.User user
+                = (org.springframework.security.core.userdetails.User)
+                SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        User currentUser = userRepository.findByEmail(user.getUsername())
+                .orElseThrow(() -> new UsernameNotFoundException(user.getUsername()));
+
+        Page<Post> postsPage = postRepository.findMyPosts(
+                currentUser.getId(),
+                status.getModerationStatus(),
+                status.isActive(),
+                pageable);
+
+        for (Post post : postsPage) {
+            int like = 0;
+            int dislike = 0;
+            PostResponse postResponse = new PostResponse();
+            UserPostResponse user1 = new UserPostResponse();
+
+            user1.setId(post.getUser().getId());
+            user1.setName(post.getUser().getName());
+
+            postResponse.setId(post.getId());
+
+            String announce = post.getText().replaceAll("<.*?>", "");
+            announce = announce.length() > 150 ? announce.substring(0, 150) + "..." : announce;
+            postResponse.setAnnounce(announce);
+
+            postResponse.setCommentCount(post.getPostComments().size());
+
+            postResponse.setTimestamp(post.getTime().toEpochSecond(ZoneOffset.UTC));
+
+            for (PostVotes postVote : post.getPostVotesList()) {
+                if (postVote.getValue() > 0) {
+                    like = like + 1;
+                }
+                if (postVote.getValue() < 0) {
+                    dislike = dislike + 1;
+                }
+            }
+
+            postResponse.setLikeCount(like);
+            postResponse.setDislikeCount(dislike);
+            postResponse.setTitle(post.getTitle());
+            postResponse.setViewCount(post.getViewCount());
+            postResponse.setUser(user1);
+            postResponses.add(postResponse);
+        }
+
+        allPostResponse.setCount((int) postsPage.getTotalElements());
+        allPostResponse.setPosts(postResponses);
+
+        return allPostResponse;
     }
 }
 
