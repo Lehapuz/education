@@ -1,5 +1,6 @@
 package main.service;
 
+import main.api.request.NewPostRequest;
 import main.api.response.*;
 import main.model.*;
 import main.repositories.PostRepository;
@@ -9,7 +10,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.Errors;
 
+import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -19,10 +22,14 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+    private final SettingService settingService;
+    private final TagService tagService;
 
-    public PostService(PostRepository postRepository, UserRepository userRepository) {
+    public PostService(PostRepository postRepository, UserRepository userRepository, SettingService settingService, TagService tagService) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
+        this.settingService = settingService;
+        this.tagService = tagService;
     }
 
 
@@ -390,6 +397,121 @@ public class PostService {
         allPostResponse.setPosts(postResponses);
 
         return allPostResponse;
+    }
+
+
+    public NewPostResponse addNewPost(NewPostRequest request, Errors errors) {
+        NewPostResponse newPostResponse = new NewPostResponse();
+        List<Tag> tags = newPostTags(request);
+
+        org.springframework.security.core.userdetails.User user
+                = (org.springframework.security.core.userdetails.User)
+                SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User currentUser = userRepository.findByEmail(user.getUsername())
+                .orElseThrow(() -> new UsernameNotFoundException(user.getUsername()));
+
+
+        if (errors.hasFieldErrors("title")) {
+            newPostResponse.setResult(false);
+            newPostResponse.setTitle(errors.getFieldError("title").getDefaultMessage());
+        }
+        if (errors.hasFieldErrors("text")) {
+            newPostResponse.setResult(false);
+            newPostResponse.setText(errors.getFieldError("text").getDefaultMessage());
+        }
+
+        HashSet<GlobalSetting> siteSettings = settingService.getSiteSettings();
+        ModerationStatus moderationStatus = ModerationStatus.NEW;
+        for (GlobalSetting setting : siteSettings) {
+            if (setting.getCode().equals("POST_PREMODERATION") && !setting.getValue().name().equals("YES")) {
+                moderationStatus = ModerationStatus.ACCEPTED;
+                break;
+            }
+        }
+
+        Post post = new Post();
+        post.setIsActive(1);
+        post.setModerationStatus(moderationStatus);
+        post.setUser(currentUser);
+        post.setTags(tags);
+        post.setTime(LocalDateTime.now());
+        post.setTitle(request.getTitle());
+        post.setText(request.getText());
+        post.setViewCount(0);
+// мне нужно избавиться от от этих значений
+        post.setModeratorId(currentUser);
+//
+        postRepository.save(post);
+
+        return newPostResponse;
+    }
+
+
+    public NewPostResponse updatePost(Integer id, NewPostRequest request, Errors errors) {
+        NewPostResponse newPostResponse = new NewPostResponse();
+        Optional<Post> currentPost = postRepository.findById(id);
+
+
+        org.springframework.security.core.userdetails.User user
+                = (org.springframework.security.core.userdetails.User)
+                SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User currentUser = userRepository.findByEmail(user.getUsername())
+                .orElseThrow(() -> new UsernameNotFoundException(user.getUsername()));
+
+
+        if (errors.hasFieldErrors("title")) {
+            newPostResponse.setResult(false);
+            newPostResponse.setTitle(errors.getFieldError("title").getDefaultMessage());
+        }
+        if (errors.hasFieldErrors("text")) {
+            newPostResponse.setResult(false);
+            newPostResponse.setText(errors.getFieldError("text").getDefaultMessage());
+        }
+
+        HashSet<GlobalSetting> siteSettings = settingService.getSiteSettings();
+        ModerationStatus moderationStatus = ModerationStatus.NEW;
+        for (GlobalSetting setting : siteSettings) {
+            if (setting.getCode().equals("POST_PREMODERATION") && !setting.getValue().name().equals("YES")) {
+                moderationStatus = ModerationStatus.ACCEPTED;
+                break;
+            }
+        }
+        List<Tag> tags = newPostTags(request);
+
+        if (currentPost.isPresent()) {
+            Post post = currentPost.get();
+
+            post.setIsActive(1);
+            post.setModerationStatus(moderationStatus);
+            post.setUser(currentUser);
+            post.setTags(tags);
+            post.setTime(LocalDateTime.now());
+            post.setTitle(request.getTitle());
+            post.setText(request.getText());
+            post.setViewCount(0);
+            // мне нужно избавиться от от этих значений
+            post.setModeratorId(currentUser);
+
+            postRepository.save(post);
+        }
+
+
+        return newPostResponse;
+    }
+
+
+    private List<Tag> newPostTags(NewPostRequest request) {
+        List<Tag> tags = new ArrayList<>();
+        if (request.getTags() != null) {
+            request.getTags().forEach(tag -> tags.add(takeTag(tag)));
+        }
+        return tags;
+    }
+
+
+    private Tag takeTag(String name) {
+        Tag tag = tagService.findTagByName(name);
+        return (tag != null) ? tag : tagService.saveNewTag(name);
     }
 }
 

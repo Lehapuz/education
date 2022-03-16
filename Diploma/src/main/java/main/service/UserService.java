@@ -142,11 +142,8 @@ public class UserService {
         if (principal == null) {
             return new LoginResponse();
         }
-
         User currentUser = userRepository.findByEmail(principal.getName())
                 .orElseThrow(() -> new UsernameNotFoundException(principal.getName()));
-
-        LoginResponse loginResponse = new LoginResponse();
 
         UserLoginResponse userLoginResponse = new UserLoginResponse();
         userLoginResponse.setEmail(currentUser.getEmail());
@@ -157,8 +154,8 @@ public class UserService {
         userLoginResponse.setModerationCount(moderationPostCount(userLoginResponse.isModeration()));
         userLoginResponse.setSettings(userLoginResponse.isModeration());
 
-        loginResponse.setResult(true);
-        loginResponse.setUser(userLoginResponse);
+        response.setResult(true);
+        response.setUser(userLoginResponse);
 
         return response;
     }

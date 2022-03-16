@@ -20,7 +20,7 @@ public class Post {
     private ModerationStatus moderationStatus;
 
     @JoinColumn(name = "moderator_id")
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     private User moderatorId;
 
     @JoinColumn(name = "user_id", nullable = false)

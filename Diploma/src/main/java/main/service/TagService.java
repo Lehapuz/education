@@ -7,6 +7,7 @@ import main.model.Post;
 import main.model.Tag;
 import main.repositories.PostRepository;
 import main.repositories.TagRepository;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -80,5 +81,18 @@ public class TagService {
         normalizeCoefficient = 1 / weights.get(weights.size() - 1);
 
         return normalizeCoefficient;
+    }
+
+
+    @CachePut(value = "tags", key = "#name")
+    public Tag saveNewTag(String name) {
+        Tag tag = new Tag();
+        tag.setName(name);
+        return tagRepository.save(tag);
+    }
+
+
+    public Tag findTagByName(String name) {
+        return tagRepository.findTagByName(name);
     }
 }

@@ -5,6 +5,8 @@ import main.model.GlobalSetting;
 import main.repositories.GlobalSettingRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
+
 @Service
 public class SettingService {
 
@@ -31,5 +33,9 @@ public class SettingService {
             }
         }
         return settingsResponse;
+    }
+
+    public HashSet<GlobalSetting> getSiteSettings(){
+        return globalSettingRepository.selectGlobalSettings();
     }
 }

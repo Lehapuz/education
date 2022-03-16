@@ -1,16 +1,17 @@
 package main.controller;
 
-import main.api.response.AllPostResponse;
-import main.api.response.CalendarResponse;
-import main.api.response.IdPostResponse;
-import main.api.response.TagListResponse;
+import main.api.request.NewPostRequest;
+import main.api.response.*;
 import main.model.PostModerationStatus;
 import main.service.PostService;
 import main.service.TagService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/")
@@ -31,7 +32,6 @@ public class ApiPostController {
                                                         @RequestParam String mode) {
 
         return ResponseEntity.ok(postService.getPost(mode, PageRequest.of(offset / limit, limit)));
-//        return new ResponseEntity<>(postService.getPost(offset,limit,mode,PageRequest.of((int) offset / limit, limit)), HttpStatus.OK);
     }
 
 
@@ -83,5 +83,20 @@ public class ApiPostController {
                                                                @RequestParam Integer limit,
                                                                @RequestParam PostModerationStatus status) {
         return ResponseEntity.ok(postService.findMyPosts(status, PageRequest.of((int) offset / limit, limit)));
+    }
+
+
+    @PostMapping("post")
+    @PreAuthorize("hasAuthority('user:write')")
+    public ResponseEntity<NewPostResponse> addNewPost(@RequestBody @Valid NewPostRequest request, Errors errors){
+        return ResponseEntity.ok(postService.addNewPost(request, errors));
+    }
+
+
+    @PutMapping("post/{id}")
+    @PreAuthorize("hasAuthority('user:write')")
+    public ResponseEntity<NewPostResponse> updatePost(@PathVariable Integer id,
+            @RequestBody @Valid NewPostRequest request, Errors errors){
+        return ResponseEntity.ok(postService.updatePost(id, request, errors));
     }
 }
