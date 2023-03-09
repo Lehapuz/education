@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User app</title>
+    <script src="/js/jquery-3.4.0.min.js"></script>
+    <script src="/js/main.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/styles.css">
+</head>
+<body>
+
+<div>
+    <h1>Добро пожаловать на сайт</h1>
+    <div>
+        <h3>Зарегистрироваться</h3>
+        <form action="/" method="post">
+
+            <label>Name</label>
+            <br>
+            <input name="name" type="text"/>
+            <br>
+            <label>Email</label>
+            <br>
+            <input name="email" type="email"/>
+            <br>
+            <br>
+            <input type="submit" value="Save"/>
+        </form>
+        <br>
+        <h2><span th:text="${registration}">text</span></h2>
+        <br>
+        <br>
+        <h3>Авторизоваться</h3>
+        <br>
+        <form action="/authorizationUser" method="post">
+            <label>Email</label>
+            <br>
+            <input name="email" type="email"/>
+            <br>
+            <br>
+            <input type="submit" value="input"/>
+        </form>
+        <br>
+        <h2><span th:text="${authorization}">text</span></h2>-->
+
+
+
+
+        <button onclick="location.href='/Authorization'">Авторизоваться</button>
+        <br>
+    </div>
+</div>
+<!--<div id="book-form">-->
+<!--    <form>-->
+<!--        <h2>Добавление книги</h2>-->
+<!--        <label>Название книги:</label>-->
+<!--        <input type="text" name="name" value="">-->
+<!--        <label>Год выпуска:</label>-->
+<!--        <input type="text" name="year" value="">-->
+<!--        <hr>-->
+<!--        <button id="save-book">Сохранить</button>-->
+<!--    </form>-->
+<!--</div>-->
+<h1>Библиотека (<span th:text="${userCount}">0</span>)</h1>-->
+<!--<button id="show-add-book-form">Добавить книгу</button>-->
+<!--<br><br>-->
+<h2>Заголовок(task count : ${userCount})</h2>
+<div id="user-list">
+    <div th:each="user : ${users}">
+        <H2><span th:text="${user.location}">text</span></H2>>
+<!--
+    </div>
+</div>
+<p th:text="${someParameter}"></p>-->
+</body>
+</html>

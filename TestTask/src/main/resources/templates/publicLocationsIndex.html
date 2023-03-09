@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User app</title>
+    <script src="/js/jquery-3.4.0.min.js"></script>
+    <script src="/js/main.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/styles.css">
+</head>
+<body>
+<h2>Доступные локации для управления</h2>
+<div id="user-list">
+
+    <div th:each="location : ${locations}">
+
+        <a th:href="@{/publicLocations/{name}(name = ${location.name})}">
+            <span th:text="${location.name}"></span>
+        </a>
+        <H2><span th:text="${location.address}">text</span></H2>
+        <H2><span th:text="${location.user.name}">text</span></H2>
+
+    </div>
+    <br>
+    <button onclick="location.href='/authorizationUser'">Назад</button>
+    <br>
+</div>
+
+
+</body>
+
+
+

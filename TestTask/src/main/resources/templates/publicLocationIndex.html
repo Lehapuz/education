@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User app</title>
+    <script src="/js/jquery-3.4.0.min.js"></script>
+    <script src="/js/main.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/styles.css">
+</head>
+<body>
+<h2>Локация</h2>
+<h2>Локация добавлена пользователем</h2>
+<h2><span th:text="${userName}">text</span></h2>
+<h2>Параметры Локация</h2>
+<h2><span th:text="${name}">text</span></h2>
+<h2><span th:text="${address}">text</span></h2>
+<h2>Друзья на локации</h2>
+<h2><span th:text="${noUsers}">text</span></h2>
+
+<div th:each="user : ${users}">
+    <H2><span th:text="${user.name}">text</span></H2>
+    <br>
+
+    <a th:href="@{/publicLocations/delete/{nameLoc}/{email}(nameLoc=${name}, email=${user.email})}">
+        <H2>Удалить с локации</H2>>
+    </a>
+
+
+    <button onclick="location.href='/deleteFromLocation"></button>
+    <br>
+</div>
+
+<div th:each="userNotOnLocation : ${usersNotOnLocation}">
+    <span th:text="${userNotOnLocation.name}">text</span>
+
+    <a th:href="@{/publicLocations/{nameLoc}/{email}(nameLoc=${name}, email=${userNotOnLocation.email})}">
+        <span th:text="${userNotOnLocation.name}">text</span>
+        <H2>Добавить пользователя на локацию</H2>>
+    </a>
+
+<!--    <a th:href="@{/publicLocations/{name}(name=${name})/{email}(email=${userNotOnLocation.email})}">-->
+<!--        <span th:text="${userNotOnLocation.name}"></span>-->
+<!--    </a>-->
+
+<!--    <a th:href="@{/publicLocations/{name}(name = ${location.name})}">-->
+<!--        <span th:text="${location.name}"></span>-->
+<!--    </a>-->
+<!--    -->
+<!--    <br>-->
+<!--    <H2> <a href="" onclick="location.href='/deleteFromLocation">Добавить на локацию</H2>-->
+<!--    <br>-->
+</div>
+
+
+
+<br>
+<button onclick="location.href='/publicLocations'">Назад</button>
+<br>
+</body>
+
+
+
