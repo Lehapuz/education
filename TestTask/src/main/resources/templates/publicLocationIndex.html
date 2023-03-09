@@ -20,16 +20,14 @@
 <div th:each="user : ${users}">
     <H2><span th:text="${user.name}">text</span></H2>
     <br>
-
     <a th:href="@{/publicLocations/delete/{nameLoc}/{email}(nameLoc=${name}, email=${user.email})}">
         <H2>Удалить с локации</H2>>
     </a>
-
-
     <button onclick="location.href='/deleteFromLocation"></button>
     <br>
 </div>
 
+<h2>Друзья вне локации</h2>
 <div th:each="userNotOnLocation : ${usersNotOnLocation}">
     <span th:text="${userNotOnLocation.name}">text</span>
 
@@ -37,22 +35,7 @@
         <span th:text="${userNotOnLocation.name}">text</span>
         <H2>Добавить пользователя на локацию</H2>>
     </a>
-
-<!--    <a th:href="@{/publicLocations/{name}(name=${name})/{email}(email=${userNotOnLocation.email})}">-->
-<!--        <span th:text="${userNotOnLocation.name}"></span>-->
-<!--    </a>-->
-
-<!--    <a th:href="@{/publicLocations/{name}(name = ${location.name})}">-->
-<!--        <span th:text="${location.name}"></span>-->
-<!--    </a>-->
-<!--    -->
-<!--    <br>-->
-<!--    <H2> <a href="" onclick="location.href='/deleteFromLocation">Добавить на локацию</H2>-->
-<!--    <br>-->
 </div>
-
-
-
 <br>
 <button onclick="location.href='/publicLocations'">Назад</button>
 <br>

@@ -56,9 +56,7 @@ public class LocationDAO {
         List<Location> newLocations = new ArrayList<>();
         for (Location location1 : locations) {
             if (location1.getName().equals(location.getName())) {
-                System.out.println("DELETE");
                 List<User> userList = location1.getUsersInLocation();
-                System.out.println("DELETE");
                 location1.setUsersInLocation(userList.stream().filter(u -> !u.getEmail()
                         .equals(user.getEmail())).collect(Collectors.toList()));
             }

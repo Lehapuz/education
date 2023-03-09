@@ -21,6 +21,9 @@ public class DefaultController {
 
     @Autowired
     private final UserService userService;
+    private final String ADMIN_ACCESS = "ADMIN_ACCESS";
+    private final String ACCESS = "ACCESS";
+
 
     public DefaultController(UserService userService) {
         this.userService = userService;
@@ -117,7 +120,6 @@ public class DefaultController {
     @GetMapping("/friends")
     public ModelAndView lookFriends(@ModelAttribute User user, Model model) {
         ModelAndView modelAndView = new ModelAndView();
-        System.out.println(user.getEmail());
         List<User> users = userService.getAllUsers();
         List<User> usersWithoutCurrent = new ArrayList<>();
         List<User> userList = new ArrayList<>();
@@ -142,7 +144,6 @@ public class DefaultController {
     public ModelAndView addPlace(@ModelAttribute User user, @ModelAttribute Location location, Model model,
                                  @RequestParam(name = "status", required = false) Access access) {
         ModelAndView modelAndView = new ModelAndView();
-        List<Location> locations = userService.getAllLocations();
         if (location.getName().isEmpty()) {
             model.addAttribute("add", "Название локации должно быть заполнено");
             modelAndView.setViewName("userIndex");
@@ -155,11 +156,11 @@ public class DefaultController {
         } else {
             location.setUser(user);
             switch (String.valueOf(access)) {
-                case "ADMIN_ACCESS" -> location.setAccess(Access.ADMIN_ACCESS);
-                case "ACCESS" -> location.setAccess(Access.ACCESS);
+                case ADMIN_ACCESS -> location.setAccess(Access.ADMIN_ACCESS);
+                case ACCESS -> location.setAccess(Access.ACCESS);
             }
             userService.saveLocation(location);
-            modelAndView.setViewName("userIndex");
+            modelAndView.setViewName("userCompleteIndex");
         }
         return modelAndView;
     }
@@ -169,7 +170,7 @@ public class DefaultController {
     public ModelAndView addCurrentLocation(@ModelAttribute User user, @RequestParam(name = "name", required = false)
             String locationName, Model model) {
         ModelAndView modelAndView = new ModelAndView();
-        Location location = new Location();
+        Location location;
         List<Location> locations = userService.getAllLocations();
 
         if (locationName.isEmpty()) {
@@ -187,7 +188,7 @@ public class DefaultController {
                 }
             }
         }
-        modelAndView.setViewName("userIndex");
+        modelAndView.setViewName("userCompleteIndex");
         return modelAndView;
     }
 
@@ -197,10 +198,8 @@ public class DefaultController {
         ModelAndView modelAndView = new ModelAndView();
         if (user.getLocation() != null) {
             userService.deleteCurrentLocation(user);
-            modelAndView.setViewName("userIndex");
-        } else {
-            modelAndView.setViewName("userIndex");
         }
+        modelAndView.setViewName("userCompleteIndex");
         return modelAndView;
     }
 
@@ -213,7 +212,7 @@ public class DefaultController {
         List<Location> locations = userService.getAllLocations();
         List<Location> publicLocations = new ArrayList<>();
         for (Location location : locations) {
-            if (location.getAccess().toString().equals("ADMIN_ACCESS")) {
+            if (location.getAccess().toString().equals(ADMIN_ACCESS)) {
                 publicLocations.add(location);
             }
         }

@@ -12,20 +12,16 @@
 <div id="user-list">
 
     <div th:each="location : ${locations}">
-
         <a th:href="@{/publicLocations/{name}(name = ${location.name})}">
             <span th:text="${location.name}"></span>
         </a>
         <H2><span th:text="${location.address}">text</span></H2>
         <H2><span th:text="${location.user.name}">text</span></H2>
-
     </div>
     <br>
     <button onclick="location.href='/authorizationUser'">Назад</button>
     <br>
 </div>
-
-
 </body>
 
 

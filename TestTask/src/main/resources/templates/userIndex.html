@@ -8,65 +8,45 @@
     <link rel="stylesheet" type="text/css" href="/css/styles.css">
 </head>
 <body>
-
 <div>
     <h1>Добро пожаловать <span th:text="${user}">text</span></h1>
     <br>
-    <br>
     <button onclick="location.href='/friends'">Просмотр пользователей</button>
     <br>
-
     <br>
     <button onclick="location.href='/publicLocations'">Просмотр Публичных локаций друзей</button>
     <br>
-
-
     <H1>Мое текущее местоположение</H1>
     <h1><span th:text="${myLocation}">text</span></h1>
-
     <br>
     <button onclick="location.href='/deleteLocation'">Удалить текущую локацию</button>
     <br>
-
-
-
     <H1>Добавить местоположение
         <H2>
-            <br>
-            <br>
             <form action="/addLocation" method="post">
                 <label>Name</label>
-                <br>
                 <input name="name" type="text"/>
                 <br>
-                <br>
                 <label>Address</label>
-                <br>
                 <input name="address" type="text"/>
-                <br>
                 <br>
                 <select name="status" th>
                     <option value="ADMIN_ACCESS">C Правом добавляться другим пользователям</option>
                     <option value="ACCESS">Без права добавляться другим пользователям</option>
                 </select>
                 <br>
-                <br>
                 <input type="submit" value="input"/>
             </form>
             <br>
             <h2><span th:text="${add}">text</span></h2>
             <br>
-
-
             <H1>Мои местоположения</H1>
             <div th:each="location : ${locations}">
                 <H2><span th:text="${location.name}">text</span></H2>
                 <H2><span th:text="${location.address}">text</span></H2>
             </div>
 
-
-            <H1>Добавить текущее местоположение
-
+            <H1>Добавить текущее местоположение. Введите название локации из своего списка
                 <br>
                 <form action="/addCurrentLocation" method="post">
                     <label>Name</label>
@@ -78,57 +58,14 @@
                 <br>
                 <h2><span th:text="${addCurrent}">text</span></h2>
                 <br>
-
-
-
-
                 <H2>
-
-
-
-            <br>
-            <button onclick="location.href='/'">Выход</button>
-            <br>
-
-
-
-
-
-            <br>
-            <h2><span th:text="${add}">text</span></h2>
-            <br>
-            <br>
-            <h2>Друзья с местоположением</h2>
-            <div id="user-list">
-
-                <div th:each="user : ${usersWithLocation}">
-                    <H2><span th:text="${user.name}">text</span></H2>
-                    <H2><span th:text="${user.location}">text</span></H2>
-
-                </div>
-
-            </div>
-
-            <br>
-            <br>
-            <h2>Зарегистрированные друзья</h2>
-            <div id="userList">
-
-                <div th:each="user : ${users}">
-                    <H2><span th:text="${user.name}">text</span></H2>
-
-                </div>
-
-            </div>
-
-
-            <button onclick="location.href='/Authorization'">Авторизоваться</button>
-            <br>
-
-        </H2>>
+                    <h2><span th:text="${add}">text</span></h2>
+                    <button onclick="location.href='/'">Выход</button>
+                    <br>
+                </H2>
+            </H1>
+        </H2>
     </H1>
 </div>
-</div>
-
 </body>
 </html>

@@ -10,30 +10,22 @@
 <body>
 <h2>Друзья с местоположением</h2>
 <div id="user-list">
-
     <div th:each="user : ${usersWithLocation}">
         <H2><span th:text="${user.name}">text</span></H2>
         <H2><span th:text="${user.location}">text</span></H2>
     </div>
-
 </div>
-
 <br>
 <br>
 <h2>Зарегистрированные друзья</h2>
 <div id="userList">
-
     <div th:each="user : ${users}">
         <H2><span th:text="${user.name}">text</span></H2>
     </div>
-
     <br>
     <button onclick="location.href='/authorizationUser'">Назад</button>
     <br>
-
 </div>
-
-
 </body>
 
 
