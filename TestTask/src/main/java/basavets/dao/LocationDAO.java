@@ -1,5 +1,6 @@
 package basavets.dao;
 
+import basavets.bean.Access;
 import basavets.bean.Location;
 import basavets.bean.User;
 
@@ -10,7 +11,13 @@ import java.util.stream.Collectors;
 
 public class LocationDAO {
 
-    private final String filePathLocation = "src/main/resources/location.csv";
+    private String filePathLocation = "src/main/resources/location.csv";
+
+    public LocationDAO(){}
+
+    public LocationDAO(String filePathLocation){
+        this.filePathLocation = filePathLocation;
+    }
 
 
     public void addLocation(Location location) {
@@ -35,7 +42,7 @@ public class LocationDAO {
         List<Location> locations = Storage.readFileLocation(filePathLocation);
         List<Location> newLocations = new ArrayList<>();
         for (Location location1 : locations) {
-            if (location1.getName().equals(location.getName())) {
+            if (location1.getName().equals(location.getName()) && location.getAccess().equals(Access.ADMIN_ACCESS)) {
                 List<User> userList;
                 if (location1.getUsersInLocation() != null) {
                     userList = location1.getUsersInLocation();

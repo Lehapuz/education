@@ -12,8 +12,15 @@ import java.util.Optional;
 @Service
 public class UserService {
 
-    private final UserDAO userDAO = new UserDAO();
-    private final LocationDAO locationDAO = new LocationDAO();
+    private UserDAO userDAO = new UserDAO();
+    private LocationDAO locationDAO = new LocationDAO();
+
+    public UserService(){}
+
+    public UserService(UserDAO userDAO, LocationDAO locationDAO){
+        this.userDAO = userDAO;
+        this.locationDAO = locationDAO;
+    }
 
     public List<User> getAllUsers(){
         return userDAO.getUsers();
@@ -25,12 +32,6 @@ public class UserService {
 
     public void saveUser(User user){
         userDAO.addUser(user);
-    }
-
-    public Optional<User> getCurrentUserLocation (Location location){
-        List<User> users = userDAO.getUsers();
-        return users.stream().filter(user -> user.getLocation().getName()
-                .equals(location.getName())).findAny();
     }
 
     public List<Location> getAllLocations(){

@@ -9,7 +9,13 @@ import java.util.Optional;
 
 public class UserDAO {
 
-    private final String filePathUser = "src/main/resources/users.csv";
+    private String filePathUser = "src/main/resources/users.csv";
+
+    public UserDAO(){}
+
+    public UserDAO(String filePathUser){
+        this.filePathUser = filePathUser;
+    }
 
 
     public List<User> getUsers() {
