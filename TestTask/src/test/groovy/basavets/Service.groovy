@@ -9,7 +9,7 @@ import basavets.dao.UserDAO
 import basavets.service.UserService
 import spock.lang.Specification
 
-class FirstSpecification extends Specification {
+class Second extends Specification {
     User user1 = new User("Vasil", "v@mail.ru")
     User user2 = new User("Alex", "leha@mail.ru")
     User user3 = new User("Petr", "p@mail.ru")
@@ -21,6 +21,7 @@ class FirstSpecification extends Specification {
     List<User> cleanUserList = new ArrayList<>()
     List<Location> locationList = new ArrayList<>()
     List<Location> cleanLocationList = new ArrayList<>()
+    UserService userService = new UserService(userDAO, locationDAO);
 
 
     def "save user"() {
@@ -29,11 +30,11 @@ class FirstSpecification extends Specification {
         userList.add(user2)
 
         when:
-        userDAO.addUser(user1)
-        userDAO.addUser(user2)
+        userService.saveUser(user1)
+        userService.saveUser(user2)
 
         then:
-        userDAO.getUsers() == userList
+        userService.getAllUsers() == userList
 
         cleanup:
         Storage.writeFileUser("src/test/resources/userTest.csv", cleanUserList)
@@ -41,11 +42,13 @@ class FirstSpecification extends Specification {
 
     def "get user by email"() {
         given:
-        userDAO.addUser(user1)
-        userDAO.addUser(user2)
+        userService.saveUser(user1)
+        userService.saveUser(user2)
+
 
         when:
-        Optional<User> user = userDAO.getUserByEmail("leha@mail.ru")
+        Optional<User> user = userService.findUserByEmail("leha@mail.ru")
+
 
         then:
         user.get() == user2
@@ -54,15 +57,16 @@ class FirstSpecification extends Specification {
         Storage.writeFileUser("src/test/resources/userTest.csv", cleanUserList)
     }
 
+
     def "save current location"() {
         given:
-        userDAO.addUser(user1)
-        userDAO.addUser(user2)
+        userService.saveUser(user1)
+        userService.saveUser(user2)
         user3.setLocation(location1)
 
         when:
-        userDAO.saveCurrentLocation(user1, location1)
-        Optional<User> user = userDAO.getUserByEmail(user1.getEmail())
+        userService.saveCurrentLocation(user1, location1)
+        Optional<User> user = userService.findUserByEmail(user1.getEmail())
 
         then:
         user.get().getLocation().getName() == user3.getLocation().getName()
@@ -74,13 +78,13 @@ class FirstSpecification extends Specification {
     def "delete current location"() {
         given:
         user1.setLocation(location1)
-        userDAO.addUser(user1)
-        userDAO.addUser(user2)
+        userService.saveUser(user1)
+        userService.saveUser(user2)
 
 
         when:
-        userDAO.deleteCurrentLocation(user1)
-        Optional<User> user = userDAO.getUserByEmail(user1.getEmail())
+        userService.deleteCurrentLocation(user1)
+        Optional<User> user = userService.findUserByEmail(user1.getEmail())
 
         then:
         user.get().getLocation() == null
@@ -100,8 +104,8 @@ class FirstSpecification extends Specification {
         locationList.add(location2)
 
         when:
-        locationDAO.addLocation(location1)
-        locationDAO.addLocation(location2)
+        userService.saveLocation(location1)
+        userService.saveLocation(location2)
 
         then:
         locationDAO.getLocations() == locationList
@@ -121,7 +125,7 @@ class FirstSpecification extends Specification {
         locationDAO.addLocation(location2)
 
         when:
-        Optional<Location> location = locationDAO.getLocationByName("Home")
+        Optional<Location> location = userService.findLocationByName("Home")
 
         then:
         location.get() == location1
@@ -136,12 +140,12 @@ class FirstSpecification extends Specification {
         location2.setAccess(Access.ADMIN_ACCESS)
         location1.setUser(user1)
         location2.setUser(user2)
-        locationDAO.addLocation(location1)
-        locationDAO.addLocation(location2)
+        userService.saveLocation(location1)
+        userService.saveLocation(location2)
 
         when:
-        locationDAO.addUserOnLocation(location2, user1)
-        Optional<Location> location = locationDAO.getLocationByName(location2.getName())
+        userService.addUserOnLocation(location2, user1)
+        Optional<Location> location = userService.findLocationByName(location2.getName())
 
         then:
         location.get().getUsersInLocation().size() == 1
@@ -160,8 +164,8 @@ class FirstSpecification extends Specification {
         locationDAO.addLocation(location2)
 
         when:
-        locationDAO.addUserOnLocation(location1, user2)
-        Optional<Location> location = locationDAO.getLocationByName(location1.getName())
+        userService.addUserOnLocation(location1, user2)
+        Optional<Location> location = userService.findLocationByName(location1.getName())
 
         then:
         location.get().getUsersInLocation() == null
@@ -176,13 +180,13 @@ class FirstSpecification extends Specification {
         location2.setAccess(Access.ADMIN_ACCESS)
         location1.setUser(user1)
         location2.setUser(user2)
-        locationDAO.addLocation(location1)
-        locationDAO.addLocation(location2)
-        locationDAO.addUserOnLocation(location2, user1)
+        userService.saveLocation(location1)
+        userService.saveLocation(location2)
+        userService.addUserOnLocation(location2, user1)
 
         when:
-        locationDAO.deleteUserFromLocation(location2, user1)
-        Optional<Location> location = locationDAO.getLocationByName(location2.getName())
+        userService.deleteUserFromLocation(location2, user1)
+        Optional<Location> location = userService.findLocationByName(location2.getName())
 
         then:
         location.get().getUsersInLocation() == null
@@ -190,8 +194,4 @@ class FirstSpecification extends Specification {
         cleanup:
         Storage.writeFileUser("src/test/resources/locationTest.csv", cleanUserList)
     }
-
-    }
-
-
-
+}
