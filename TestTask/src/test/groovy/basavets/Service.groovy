@@ -9,7 +9,7 @@ import basavets.dao.UserDAO
 import basavets.service.UserService
 import spock.lang.Specification
 
-class Second extends Specification {
+class Service extends Specification {
     User user1 = new User("Vasil", "v@mail.ru")
     User user2 = new User("Alex", "leha@mail.ru")
     User user3 = new User("Petr", "p@mail.ru")
@@ -45,10 +45,8 @@ class Second extends Specification {
         userService.saveUser(user1)
         userService.saveUser(user2)
 
-
         when:
         Optional<User> user = userService.findUserByEmail("leha@mail.ru")
-
 
         then:
         user.get() == user2
@@ -56,7 +54,6 @@ class Second extends Specification {
         cleanup:
         Storage.writeFileUser("src/test/resources/userTest.csv", cleanUserList)
     }
-
 
     def "save current location"() {
         given:
@@ -81,7 +78,6 @@ class Second extends Specification {
         userService.saveUser(user1)
         userService.saveUser(user2)
 
-
         when:
         userService.deleteCurrentLocation(user1)
         Optional<User> user = userService.findUserByEmail(user1.getEmail())
@@ -92,7 +88,6 @@ class Second extends Specification {
         cleanup:
         Storage.writeFileUser("src/test/resources/userTest.csv", cleanUserList)
     }
-
 
     def "save location"() {
         given:
@@ -113,7 +108,6 @@ class Second extends Specification {
         cleanup:
         Storage.writeFileLocation("src/test/resources/locationTest.csv", cleanLocationList)
     }
-
 
     def "get location by name"() {
         given:
