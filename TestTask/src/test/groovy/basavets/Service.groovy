@@ -3,13 +3,19 @@ package basavets
 import basavets.bean.Access
 import basavets.bean.Location
 import basavets.bean.User
+import basavets.controller.DefaultController
 import basavets.dao.LocationDAO
 import basavets.dao.Storage
 import basavets.dao.UserDAO
 import basavets.service.UserService
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.lang.Nullable
+import org.springframework.ui.Model
 import spock.lang.Specification
 
+@SpringBootTest
 class Service extends Specification {
+
     User user1 = new User("Vasil", "v@mail.ru")
     User user2 = new User("Alex", "leha@mail.ru")
     User user3 = new User("Petr", "p@mail.ru")
@@ -22,6 +28,8 @@ class Service extends Specification {
     List<Location> locationList = new ArrayList<>()
     List<Location> cleanLocationList = new ArrayList<>()
     UserService userService = new UserService(userDAO, locationDAO);
+
+    DefaultController defaultController = new DefaultController(userService)
 
 
     def "save user"() {
@@ -187,5 +195,284 @@ class Service extends Specification {
 
         cleanup:
         Storage.writeFileUser("src/test/resources/locationTest.csv", cleanUserList)
+    }
+
+    def "user is present"() {
+
+        when:
+        userService.saveUser(user1)
+        userService.saveUser(user2)
+
+        then:
+        userService.emailIsPresent("leha@mail.ru")
+
+        cleanup:
+        Storage.writeFileUser("src/test/resources/userTest.csv", cleanUserList)
+    }
+
+    def "location is present"() {
+
+        given:
+        location1.setAccess(Access.ACCESS)
+        location2.setAccess(Access.ADMIN_ACCESS)
+        location1.setUser(user1)
+        location2.setUser(user2)
+
+        when:
+        userService.saveLocation(location1)
+        userService.saveLocation(location2)
+
+        then:
+        userService.nameLocationIsPresent("Home")
+
+        cleanup:
+        Storage.writeFileUser("src/test/resources/locationTest.csv", cleanUserList)
+    }
+
+    def "get user location"() {
+
+        given:
+        location1.setAccess(Access.ACCESS)
+        location2.setAccess(Access.ADMIN_ACCESS)
+        location1.setUser(user1)
+        location2.setUser(user1)
+
+        when:
+        userService.saveLocation(location1)
+        userService.saveLocation(location2)
+
+        then:
+        userService.getUserLocation(user1).size() == 2
+
+        cleanup:
+        Storage.writeFileUser("src/test/resources/locationTest.csv", cleanUserList)
+    }
+
+    def "get user without current location"() {
+
+        when:
+        userService.saveUser(user1)
+        userService.saveUser(user2)
+        userService.saveUser(user3)
+
+        then:
+        userService.getUsersWithoutCurrent(user1).size() == 2
+
+        cleanup:
+        Storage.writeFileUser("src/test/resources/userTest.csv", cleanUserList)
+    }
+
+    def "get user with location"() {
+
+        when:
+        user1.setLocation(location1)
+        user2.setLocation(location2)
+        userService.saveUser(user1)
+        userService.saveUser(user2)
+        userService.saveUser(user3)
+
+        then:
+        userService.getUsersWithLocation(user2).size() == 1
+
+        cleanup:
+        Storage.writeFileUser("src/test/resources/userTest.csv", cleanUserList)
+    }
+
+    def "when context is loaded then all expected beans are created"() {
+        expect: "the Controller is created"
+        defaultController
+    }
+
+    def "add user"() {
+
+        given:
+        Model model = new Model() {
+            @Override
+            Model addAttribute(String attributeName, @Nullable Object attributeValue) {
+                return null
+            }
+
+            @Override
+            Model addAttribute(Object attributeValue) {
+                return null
+            }
+
+            @Override
+            Model addAllAttributes(Collection<?> attributeValues) {
+                return null
+            }
+
+            @Override
+            Model addAllAttributes(Map<String, ?> attributes) {
+                return null
+            }
+
+            @Override
+            Model mergeAttributes(Map<String, ?> attributes) {
+                return null
+            }
+
+            @Override
+            boolean containsAttribute(String attributeName) {
+                return false
+            }
+
+            @Override
+            Object getAttribute(String attributeName) {
+                return null
+            }
+
+            @Override
+            Map<String, Object> asMap() {
+                return null
+            }
+        }
+
+        User user = new User("Lena", "lena@mail.ru");
+        Location location = new Location("current location", "there")
+
+        when:
+        defaultController.registerUser(user, model)
+        defaultController.addPlace(user, location, model, Access.ACCESS)
+        defaultController.addCurrentLocation(user, "current location", model)
+
+        then:
+        userService.findUserByEmail(user.getEmail()).get().getLocation().getName() == "current location"
+
+        cleanup:
+        defaultController.deleteLocation(user)
+        Storage.writeFileUser("src/test/resources/userTest.csv", cleanUserList)
+        Storage.writeFileLocation("src/test/resources/locationTest.csv", cleanLocationList)
+    }
+
+    def "save user on location"() {
+
+        given:
+        Model model = new Model() {
+            @Override
+            Model addAttribute(String attributeName, @Nullable Object attributeValue) {
+                return null
+            }
+
+            @Override
+            Model addAttribute(Object attributeValue) {
+                return null
+            }
+
+            @Override
+            Model addAllAttributes(Collection<?> attributeValues) {
+                return null
+            }
+
+            @Override
+            Model addAllAttributes(Map<String, ?> attributes) {
+                return null
+            }
+
+            @Override
+            Model mergeAttributes(Map<String, ?> attributes) {
+                return null
+            }
+
+            @Override
+            boolean containsAttribute(String attributeName) {
+                return false
+            }
+
+            @Override
+            Object getAttribute(String attributeName) {
+                return null
+            }
+
+            @Override
+            Map<String, Object> asMap() {
+                return null
+            }
+        }
+
+        User user1 = new User("Lena", "lena@mail.ru");
+        User user2 = new User("Alex", "alex@mail.ru");
+        Location location = new Location("current location", "there")
+        defaultController.registerUser(user1, model)
+        defaultController.registerUser(user2, model)
+        defaultController.addPlace(user1, location, model, Access.ADMIN_ACCESS)
+        defaultController.addCurrentLocation(user1, "current location", model)
+
+
+        when:
+        defaultController.addUserOnLocation("current location", "alex@mail.ru")
+
+        then:
+        userService.findLocationByName(location.getName()).get().getUsersInLocation().size() == 1
+
+        cleanup:
+        Storage.writeFileUser("src/test/resources/userTest.csv", cleanUserList)
+        Storage.writeFileLocation("src/test/resources/locationTest.csv", cleanLocationList)
+    }
+
+
+    def "del user from location"() {
+
+        given:
+        Model model = new Model() {
+            @Override
+            Model addAttribute(String attributeName, @Nullable Object attributeValue) {
+                return null
+            }
+
+            @Override
+            Model addAttribute(Object attributeValue) {
+                return null
+            }
+
+            @Override
+            Model addAllAttributes(Collection<?> attributeValues) {
+                return null
+            }
+
+            @Override
+            Model addAllAttributes(Map<String, ?> attributes) {
+                return null
+            }
+
+            @Override
+            Model mergeAttributes(Map<String, ?> attributes) {
+                return null
+            }
+
+            @Override
+            boolean containsAttribute(String attributeName) {
+                return false
+            }
+
+            @Override
+            Object getAttribute(String attributeName) {
+                return null
+            }
+
+            @Override
+            Map<String, Object> asMap() {
+                return null
+            }
+        }
+
+        User user1 = new User("Lena", "lena@mail.ru");
+        User user2 = new User("Alex", "alex@mail.ru");
+        Location location = new Location("current location", "there")
+        defaultController.registerUser(user1, model)
+        defaultController.registerUser(user2, model)
+        defaultController.addPlace(user1, location, model, Access.ADMIN_ACCESS)
+        defaultController.addCurrentLocation(user1, "current location", model)
+        defaultController.addUserOnLocation("current location", "alex@mail.ru")
+
+        when:
+        defaultController.deleteUserFromLocation("current location", "alex@mail.ru")
+
+        then:
+        userService.findLocationByName(location.getName()).get().getUsersInLocation() == null
+
+        cleanup:
+        Storage.writeFileUser("src/test/resources/userTest.csv", cleanUserList)
+        Storage.writeFileLocation("src/test/resources/locationTest.csv", cleanLocationList)
     }
 }

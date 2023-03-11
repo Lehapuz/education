@@ -47,7 +47,7 @@ public class DefaultController {
         } else if (user.getEmail().isEmpty()) {
             model.addAttribute("registration", "Адрес элктронной почты должен быть заполнен");
             return "index";
-        } else if (userService.findUserByEmail(user.getEmail()).isPresent()) {
+        } else if (userService.emailIsPresent(user.getEmail())) {
             model.addAttribute("registration", "Такой Емайл уже зарегистрирован");
             return "index";
         } else {
@@ -73,14 +73,7 @@ public class DefaultController {
             modelAndView.setViewName("userIndex");
             modelAndView.addObject(currentUser);
 
-            List<Location> locations = userService.getAllLocations();
-            List<Location> myLocations = new ArrayList<>();
-            for (Location location : locations) {
-                if (currentUser.get().getEmail().equals(location.getUser().getEmail())) {
-                    myLocations.add(location);
-                }
-            }
-            model.addAttribute("locations", myLocations);
+            model.addAttribute("locations", userService.getUserLocation(currentUser.get()));
 
             if (currentUser.get().getLocation() != null) {
                 model.addAttribute("myLocation", currentUser.get().getLocation().getName());
@@ -100,14 +93,8 @@ public class DefaultController {
         modelAndView.setViewName("userIndex");
         modelAndView.addObject(currentUser);
 
-        List<Location> locations = userService.getAllLocations();
-        List<Location> myLocations = new ArrayList<>();
-        for (Location location : locations) {
-            if (currentUser.get().getEmail().equals(location.getUser().getEmail())) {
-                myLocations.add(location);
-            }
-        }
-        model.addAttribute("locations", myLocations);
+        model.addAttribute("locations", userService.getUserLocation(currentUser.get()));
+
         if (currentUser.get().getLocation() != null) {
             model.addAttribute("myLocation", currentUser.get().getLocation().getName());
         } else {
@@ -120,20 +107,10 @@ public class DefaultController {
     @GetMapping("/friends")
     public ModelAndView lookFriends(@ModelAttribute User user, Model model) {
         ModelAndView modelAndView = new ModelAndView();
-        List<User> users = userService.getAllUsers();
-        List<User> usersWithoutCurrent = new ArrayList<>();
-        List<User> userList = new ArrayList<>();
-        for (User user1 : users) {
-            if (user.getEmail().equals(user1.getEmail())) {
-                continue;
-            }
-            usersWithoutCurrent.add(user1);
-            if (user1.getLocation() != null) {
-                userList.add(user1);
-            }
-        }
-        model.addAttribute("usersWithLocation", userList);
-        model.addAttribute("users", usersWithoutCurrent);
+
+        model.addAttribute("usersWithLocation", userService.getUsersWithLocation(user));
+        model.addAttribute("users", userService.getUsersWithoutCurrent(user));
+
         modelAndView.setViewName("friendsIndex");
         modelAndView.addObject(user);
         return modelAndView;
@@ -150,7 +127,7 @@ public class DefaultController {
         } else if (location.getAddress().isEmpty()) {
             model.addAttribute("add", "Адрес должен быть указан");
             modelAndView.setViewName("userIndex");
-        } else if (userService.findLocationByName(location.getName()).isPresent()) {
+        } else if (userService.nameLocationIsPresent(location.getName())) {
             model.addAttribute("add", "Такое название локации уже есть в системе");
             modelAndView.setViewName("userIndex");
         } else {
