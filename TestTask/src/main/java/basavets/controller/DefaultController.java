@@ -88,17 +88,21 @@ public class DefaultController {
     @GetMapping("/authorizationUser")
     public ModelAndView getAuthorizationUser(@ModelAttribute User user, Model model) {
         ModelAndView modelAndView = new ModelAndView();
-        Optional<User> currentUser = userService.findUserByEmail(user.getEmail());
-        model.addAttribute("user", currentUser.get());
-        modelAndView.setViewName("userIndex");
-        modelAndView.addObject(currentUser);
+        try {
+            Optional<User> currentUser = userService.findUserByEmail(user.getEmail());
+            model.addAttribute("user", currentUser.get());
+            modelAndView.setViewName("userIndex");
+            modelAndView.addObject(currentUser);
 
-        model.addAttribute("locations", userService.getUserLocation(currentUser.get()));
+            model.addAttribute("locations", userService.getUserLocation(currentUser.get()));
 
-        if (currentUser.get().getLocation() != null) {
-            model.addAttribute("myLocation", currentUser.get().getLocation().getName());
-        } else {
-            model.addAttribute("myLocation", "Локация не установлена");
+            if (currentUser.get().getLocation() != null) {
+                model.addAttribute("myLocation", currentUser.get().getLocation().getName());
+            } else {
+                model.addAttribute("myLocation", "Локация не установлена");
+            }
+        } catch (Exception e) {
+            modelAndView.setViewName("errorPageIndex");
         }
         return modelAndView;
     }
@@ -107,12 +111,15 @@ public class DefaultController {
     @GetMapping("/friends")
     public ModelAndView lookFriends(@ModelAttribute User user, Model model) {
         ModelAndView modelAndView = new ModelAndView();
+        try {
+            model.addAttribute("usersWithLocation", userService.getUsersWithLocation(user));
+            model.addAttribute("users", userService.getUsersWithoutCurrent(user));
 
-        model.addAttribute("usersWithLocation", userService.getUsersWithLocation(user));
-        model.addAttribute("users", userService.getUsersWithoutCurrent(user));
-
-        modelAndView.setViewName("friendsIndex");
-        modelAndView.addObject(user);
+            modelAndView.setViewName("friendsIndex");
+            modelAndView.addObject(user);
+        } catch (Exception e) {
+            modelAndView.setViewName("errorPageIndex");
+        }
         return modelAndView;
     }
 
