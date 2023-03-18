@@ -137,9 +137,9 @@ public class UserService {
 
     public List<User> getUsersOnLocation(String name) {
         Optional<Location> location = findLocationByName(name);
-        List <User> userList = new ArrayList<>();
-        for (User user : location.get().getUsersInLocation()){
-            if (findUserByEmail(user.getEmail()).isPresent()){
+        List<User> userList = new ArrayList<>();
+        for (User user : location.get().getUsersInLocation()) {
+            if (findUserByEmail(user.getEmail()).isPresent()) {
                 Optional<User> user1 = findUserByEmail(user.getEmail());
                 userList.add(user1.get());
             }
@@ -147,4 +147,3 @@ public class UserService {
         return userList;
     }
 }
-

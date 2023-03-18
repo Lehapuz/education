@@ -1,6 +1,5 @@
 package basavets.dao;
 
-import basavets.bean.Access;
 import basavets.bean.Location;
 import basavets.bean.User;
 

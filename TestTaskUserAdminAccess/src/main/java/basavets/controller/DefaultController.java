@@ -1,6 +1,5 @@
 package basavets.controller;
 
-import basavets.bean.Access;
 import basavets.bean.AdminFriendsLocation;
 import basavets.bean.Location;
 import basavets.bean.User;
@@ -14,8 +13,6 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-
 
 @Controller
 @SessionAttributes(value = "user")
@@ -23,8 +20,6 @@ public class DefaultController {
 
     @Autowired
     private final UserService userService;
-    private final String ADMIN_ACCESS = "ADMIN_ACCESS";
-    private final String ACCESS = "ACCESS";
 
 
     public DefaultController(UserService userService) {
@@ -130,7 +125,7 @@ public class DefaultController {
 
 
     @GetMapping("/friends/{locationName}")
-    public ModelAndView getUsersOnPublicLocations(@PathVariable(value = "locationName") String name, Model model){
+    public ModelAndView getUsersOnPublicLocations(@PathVariable(value = "locationName") String name, Model model) {
         ModelAndView modelAndView = new ModelAndView();
         model.addAttribute("usersOnLocation", userService.getUsersOnLocation(name));
         modelAndView.setViewName("usersOnLocationIndex");
@@ -139,8 +134,7 @@ public class DefaultController {
 
 
     @PostMapping("/addLocation")
-    public ModelAndView addPlace(@ModelAttribute User user, @ModelAttribute Location location, Model model,
-                                 @RequestParam(name = "status", required = false) Access access) {
+    public ModelAndView addPlace(@ModelAttribute User user, @ModelAttribute Location location, Model model) {
         ModelAndView modelAndView = new ModelAndView();
         if (location.getName().isEmpty()) {
             model.addAttribute("add", "Название локации должно быть заполнено");
@@ -199,7 +193,6 @@ public class DefaultController {
     public ModelAndView addModerator(@ModelAttribute User user,
                                      @RequestParam(name = "location_name", required = false) String locationName,
                                      @RequestParam(name = "user_email", required = false) String userFriendEmail) {
-        //Optional<User> currentUser = userService.findUserByEmail(user.getEmail());
         ModelAndView modelAndView = new ModelAndView();
         if (userFriendEmail.isEmpty() || locationName.isEmpty()) {
             modelAndView.setViewName("userNotCompleteIndex");
@@ -218,24 +211,6 @@ public class DefaultController {
         }
         return modelAndView;
     }
-
-
-//    @GetMapping("/publicLocations")
-//    public ModelAndView getPublicLocations(Model model) {
-//        ModelAndView modelAndView = new ModelAndView();
-//        Location location1 = new Location();
-//        modelAndView.addObject("location", location1);
-//        List<Location> locations = userService.getAllLocations();
-//        List<Location> publicLocations = new ArrayList<>();
-//        for (Location location : locations) {
-//            if (location.getAccess().toString().equals(ADMIN_ACCESS)) {
-//                publicLocations.add(location);
-//            }
-//        }
-//        model.addAttribute("locations", publicLocations);
-//        modelAndView.setViewName("publicLocationsIndex");
-//        return modelAndView;
-//    }
 
 
     @GetMapping("/moderatorLocations/{locationName}")
@@ -273,44 +248,6 @@ public class DefaultController {
         modelAndView.setViewName("publicLocationIndex");
         return modelAndView;
     }
-
-
-//    @GetMapping("/publicLocations/{name}")
-//    public ModelAndView getUserOnLocation(@PathVariable(value = "name") String name, Model model) {
-//        ModelAndView modelAndView = new ModelAndView();
-//        Optional<Location> location = userService.findLocationByName(name);
-//        Optional<User> currentUser = userService.findUserByEmail(location.get().getUser().getEmail());
-//        List<User> users = new ArrayList<>();
-//        List<User> allUsers = userService.getAllUsers();
-//        List<User> usersNotOnLocation = new ArrayList<>();
-//        if (location.get().getUsersInLocation() == null) {
-//            model.addAttribute("noUsers", "Нет пользователей на локации");
-//        } else {
-//            for (User user : location.get().getUsersInLocation()) {
-//                Optional<User> newUser;
-//                newUser = userService.findUserByEmail(user.getEmail());
-//                users.add(newUser.get());
-//                model.addAttribute("users", users);
-//            }
-//        }
-//        model.addAttribute("userName", currentUser.get().getName());
-//        model.addAttribute("name", location.get().getName());
-//        model.addAttribute("address", location.get().getAddress());
-//
-//        for (User user : allUsers) {
-//            if (!user.getEmail().equals(currentUser.get().getEmail()) && location.get().getUsersInLocation() == null) {
-//                usersNotOnLocation.add(user);
-//            } else {
-//                if (users.stream().noneMatch(u -> u.getEmail().equals(user.getEmail()))
-//                        && !user.getEmail().equals(currentUser.get().getEmail())) {
-//                    usersNotOnLocation.add(user);
-//                }
-//            }
-//        }
-//        model.addAttribute("usersNotOnLocation", usersNotOnLocation);
-//        modelAndView.setViewName("publicLocationIndex");
-//        return modelAndView;
-//    }
 
 
     @GetMapping("/moderatorLocations/{locationName}/{userEmail}")
