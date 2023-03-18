@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User app</title>
+<!--    <script src="/js/jquery-3.4.0.min.js"></script>-->
+<!--    <script src="/js/main.js"></script>-->
+    <link rel="stylesheet" type="text/css" href="/css/styles.css">
+</head>
+<body>
+<h2>Локация</h2>
+<h2>Локация добавлена пользователем</h2>
+<h2><span th:text="${userName}">text</span></h2>
+<h2>Параметры Локация</h2>
+<h2><span th:text="${name}">text</span></h2>
+<h2><span th:text="${address}">text</span></h2>
+<h2>Друзья на локации</h2>
+<h2><span th:text="${noUsers}">text</span></h2>
+
+<div th:each="user : ${users}">
+    <H2><span th:text="${user.name}">text</span></H2>
+    <br>
+    <a th:href="@{/moderatorLocations/delete/{locationName}/{userEmail}(locationName=${name}, userEmail=${user.email})}">
+        <H2>Удалить с локации</H2>>
+    </a>
+    <button onclick="location.href='/deleteFromLocation"></button>
+    <br>
+</div>
+
+<h2>Друзья вне локации</h2>
+<div th:each="userNotOnLocation : ${usersNotOnLocation}">
+    <span th:text="${userNotOnLocation.name}">text</span>
+
+    <a th:href="@{/moderatorLocations/{locationName}/{userEmail}(locationName=${name}, userEmail=${userNotOnLocation.email})}">
+        <span th:text="${userNotOnLocation.name}">text</span>
+        <H2>Добавить пользователя на локацию</H2>>
+    </a>
+</div>
+<br>
+<button onclick="location.href='/authorizationUser'">Назад</button>
+<br>
+</body>
+
+
+

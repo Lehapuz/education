@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User app</title>
+<!--    <script src="/js/jquery-3.4.0.min.js"></script>-->
+<!--    <script src="/js/main.js"></script>-->
+    <link rel="stylesheet" type="text/css" href="/css/styles.css">
+</head>
+<body>
+<div>
+    <h1>Добро пожаловать <span th:text="${user}">text</span></h1>
+    <br>
+    <button onclick="location.href='/friends'">Просмотр пользователей</button>
+    <br>
+<!--    <br>-->
+<!--    <button onclick="location.href='/publicLocations'">Просмотр Публичных локаций друзей</button>-->
+<!--    <br>-->
+    <H1>Мое текущее местоположение</H1>
+    <h1><span th:text="${myLocation}">text</span></h1>
+    <br>
+    <button onclick="location.href='/deleteLocation'">Удалить текущую локацию</button>
+    <br>
+    <H1>Добавить местоположение
+        <H2>
+            <form action="/addLocation" method="post">
+                <label>Name</label>
+                <input name="name" type="text"/>
+                <br>
+                <label>Address</label>
+                <input name="address" type="text"/>
+                <br>
+<!--                <select name="status" >-->
+<!--                    <option value="ADMIN_ACCESS">C Правом добавляться другим пользователям</option>-->
+<!--                    <option value="ACCESS">Без права добавляться другим пользователям</option>-->
+<!--                </select>-->
+<!--                <br>-->
+                <input type="submit" value="input"/>
+            </form>
+            <br>
+            <h2><span th:text="${add}">text</span></h2>
+            <br>
+            <H1>Мои местоположения</H1>
+            <div th:each="location : ${locations}">
+                <H2><span th:text="${location.name}">text</span></H2>
+                <H2><span th:text="${location.address}">text</span></H2>
+            </div>
+            <H1>Добавить текущее местоположение. Введите название локации из своего списка
+                <br>
+                <form action="/addCurrentLocation" method="post">
+                    <label>Name</label>
+                    <br>
+                    <input name="name" type="text"/>
+                    <br>
+                    <input type="submit" value="input"/>
+                </form>
+<!--                <br>-->
+<!--                <h2><span th:text="${addCurrent}">text</span></h2>-->
+                <br>
+                <H2>
+                    <h2><span th:text="${add}">text</span></h2>
+
+
+                    <H1>Добавить возможность модерирования локации для пользователя
+                        друга. Введите название локации из своего списка и электронную почту друга</H1>
+                        <br>
+                        <form action="/addModerator" method="post">
+                            <label>location_name</label>
+                            <br>
+                            <input name="location_name" type="text"/>
+                            <br>
+                            <label>user_email</label>
+                            <br>
+                            <input name="user_email" type="email"/>
+                            <br>
+                            <input type="submit" value="input"/>
+                        </form>
+                        <br>
+
+
+                    <H1>Местоположения друзей доступные для модерирования</H1>
+                    <div th:each="adminAccessLocation : ${adminAccessLocations}">
+                        <a th:href="@{/moderatorLocations/{locationName}(locationName = ${adminAccessLocation.locationName})}">
+                        <H2><span th:text="${adminAccessLocation.locationName}">text</span></H2>
+                        </a>
+                    </div>
+                    <br>
+                    <br>
+                    <button onclick="location.href='/'">Выход</button>
+                    <br>
+                </H2>
+            </H1>
+        </H2>
+    </H1>
+</div>
+</body>
+</html>
