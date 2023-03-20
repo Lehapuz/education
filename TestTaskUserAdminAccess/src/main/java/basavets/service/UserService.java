@@ -13,21 +13,22 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+
 @Service
 public class UserService {
 
-    private UserDAO userDAO = new UserDAO();
-    private LocationDAO locationDAO = new LocationDAO();
-    private AdminFriendsLocationDAO adminFriendsLocationDAO = new AdminFriendsLocationDAO();
 
-    public UserService() {
-    }
+    private final UserDAO userDAO;
+    private final LocationDAO locationDAO;
+    private final AdminFriendsLocationDAO adminFriendsLocationDAO;
+
 
     public UserService(UserDAO userDAO, LocationDAO locationDAO, AdminFriendsLocationDAO adminFriendsLocationDAO) {
         this.userDAO = userDAO;
         this.locationDAO = locationDAO;
         this.adminFriendsLocationDAO = adminFriendsLocationDAO;
     }
+
 
     public List<User> getAllUsers() {
         return userDAO.getUsers();

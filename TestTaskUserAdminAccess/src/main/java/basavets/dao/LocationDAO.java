@@ -2,12 +2,14 @@ package basavets.dao;
 
 import basavets.bean.Location;
 import basavets.bean.User;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Repository
 public class LocationDAO {
 
     private String filePathLocation = "src/main/resources/location.csv";

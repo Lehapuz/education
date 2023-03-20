@@ -1,9 +1,11 @@
 package basavets.dao;
 
 import basavets.bean.AdminFriendsLocation;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public class AdminFriendsLocationDAO {
 
     private String filePathLocation = "src/main/resources/adminUserLocation.csv";

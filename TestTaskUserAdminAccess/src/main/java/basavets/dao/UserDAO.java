@@ -2,11 +2,13 @@ package basavets.dao;
 
 import basavets.bean.Location;
 import basavets.bean.User;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Repository
 public class UserDAO {
 
     private String filePathUser = "src/main/resources/users.csv";
