@@ -6,8 +6,12 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 @Component
@@ -40,21 +44,19 @@ public class TelegramBot extends TelegramLongPollingBot {
 
             if (messageText.equals("/start")) {
                 textPrint(chaTId, update.getMessage().getChat().getFirstName());
-                sendText(chaTId, "What kind of currency do you need?");
                 setConnection(chaTId);
-                sendText(chaTId, "Input name of currency to know course");
             } else if (connection.getCurrency().containsKey(messageText)) {
                 getCurrency(connection.getCurrency(), chaTId, messageText);
             } else {
-                sendText(chaTId, "This currency was not recognize");
-                sendText(chaTId, "please input /start");
+                sendText(chaTId, "Команда не распознана");
+                sendText(chaTId, "Нажмите /start");
             }
         }
     }
 
 
     private void textPrint(long chatId, String name) {
-        String answer = "Hi " + name + " nice to meet you";
+        String answer = "Привет " + name + " рад тебя видеть";
         sendText(chatId, answer);
     }
 
@@ -70,17 +72,24 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
     }
 
+
     private void setConnection(long chatId) {
         SendMessage message = new SendMessage();
         connection.setCurrency();
         message.setChatId(String.valueOf(chatId));
+        ArrayList<KeyboardRow> keyboardRowList = new ArrayList<>();
         for (String c : connection.getCurrency().keySet()) {
-            message.setText(c);
-            try {
-                execute(message);
-            } catch (TelegramApiException telegramApiException) {
-                telegramApiException.printStackTrace();
-            }
+            KeyboardRow keyboardRow = new KeyboardRow();
+            keyboardRow.add(new KeyboardButton(c));
+            keyboardRowList.add(keyboardRow);
+            setButton(message).setKeyboard(keyboardRowList);
+        }
+        message.setText("Выберите курс какой валюты желаете узнать");
+        try {
+            execute(message);
+
+        } catch (TelegramApiException telegramApiException) {
+            telegramApiException.printStackTrace();
         }
     }
 
@@ -88,11 +97,22 @@ public class TelegramBot extends TelegramLongPollingBot {
     private void getCurrency(HashMap<String, String> courses, long chatId, String key) {
         SendMessage message = new SendMessage();
         message.setChatId(String.valueOf(chatId));
-        message.setText(courses.get(key));
+
+        message.setText(courses.get(key) + " рубля за " + connection.getHashCurrency().get(courses.get(key)));
         try {
             execute(message);
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
+    }
+
+
+    private ReplyKeyboardMarkup setButton(SendMessage sendMessage) {
+        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
+        sendMessage.setReplyMarkup(replyKeyboardMarkup);
+        replyKeyboardMarkup.setSelective(true);
+        replyKeyboardMarkup.setResizeKeyboard(true);
+        replyKeyboardMarkup.setOneTimeKeyboard(false);
+        return replyKeyboardMarkup;
     }
 }

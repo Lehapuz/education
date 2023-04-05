@@ -13,9 +13,11 @@ import java.util.HashMap;
 public class Connection {
 
     private final HashMap<String, String> currency;
+    private final HashMap<String, String> hashCurrency;
 
-    public Connection(HashMap<String, String> currency) {
+    public Connection(HashMap<String, String> currency, HashMap<String, String> hashCurrency) {
         this.currency = currency;
+        this.hashCurrency = hashCurrency;
     }
 
 
@@ -29,9 +31,11 @@ public class Connection {
         }
         Elements elements1 = null;
         Elements elements2 = null;
+        Elements elements3 = null;
         if (document != null) {
             elements1 = document.getElementsByAttributeValueStarting("class", "curName");
             elements2 = document.getElementsByAttributeValueStarting("class", "curCours");
+            elements3 = document.getElementsByAttributeValueStarting("class", "curAmount");
         }
 
         ArrayList<String> nameCurrency = new ArrayList<>();
@@ -42,10 +46,15 @@ public class Connection {
         if (elements2 != null) {
             elements2.forEach(element -> numberCurrency.add(element.text()));
         }
+        ArrayList<String> amountCurrency = new ArrayList<>();
+        if (elements3 != null) {
+            elements3.forEach(element -> amountCurrency.add(element.text()));
+        }
 
-        for (int i = 0; i < nameCurrency.size(); i++) {
+        for (int i = 0; i < amountCurrency.size(); i++) {
             for (int j = i; ; ) {
                 currency.put(nameCurrency.get(i), numberCurrency.get(j));
+                hashCurrency.put(numberCurrency.get(j), amountCurrency.get(j));
                 break;
             }
         }
@@ -53,5 +62,9 @@ public class Connection {
 
     public HashMap<String, String> getCurrency() {
         return currency;
+    }
+
+    public HashMap<String, String> getHashCurrency() {
+        return hashCurrency;
     }
 }
