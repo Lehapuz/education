@@ -52,11 +52,8 @@ public class Connection {
         }
 
         for (int i = 0; i < amountCurrency.size(); i++) {
-            for (int j = i; ; ) {
-                currency.put(nameCurrency.get(i), numberCurrency.get(j));
-                hashCurrency.put(numberCurrency.get(j), amountCurrency.get(j));
-                break;
-            }
+            currency.put(nameCurrency.get(i), numberCurrency.get(i));
+            hashCurrency.put(numberCurrency.get(i), amountCurrency.get(i));
         }
     }
 

@@ -2,6 +2,7 @@ package basavets.service;
 
 import basavets.config.BotConfig;
 import basavets.connection.Connection;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -14,6 +15,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+@Slf4j
 @Component
 public class TelegramBot extends TelegramLongPollingBot {
 
@@ -47,6 +49,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 setConnection(chaTId);
             } else if (connection.getCurrency().containsKey(messageText)) {
                 getCurrency(connection.getCurrency(), chaTId, messageText);
+                log.info("User -" + update.getMessage().getChat().getFirstName() + " received answer");
             } else {
                 sendText(chaTId, "Команда не распознана");
                 sendText(chaTId, "Нажмите /start");
@@ -68,6 +71,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         try {
             execute(message);
         } catch (TelegramApiException e) {
+            log.error("Error " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -87,9 +91,8 @@ public class TelegramBot extends TelegramLongPollingBot {
         message.setText("Выберите курс какой валюты желаете узнать");
         try {
             execute(message);
-
-        } catch (TelegramApiException telegramApiException) {
-            telegramApiException.printStackTrace();
+        } catch (TelegramApiException e) {
+            log.error("Error " + e.getMessage());
         }
     }
 
@@ -102,7 +105,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         try {
             execute(message);
         } catch (TelegramApiException e) {
-            e.printStackTrace();
+            log.error("Error " + e.getMessage());
         }
     }
 
