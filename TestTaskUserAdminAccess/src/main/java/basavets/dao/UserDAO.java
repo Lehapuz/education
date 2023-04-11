@@ -11,7 +11,7 @@ import java.util.Optional;
 @Repository
 public class UserDAO {
 
-    private String filePathUser = "src/main/resources/users.csv";
+    private String filePathUser = "/root/web/TestTaskUserAdminAccess/src/main/resources/users.csv";
 
     public UserDAO(){}
 

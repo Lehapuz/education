@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 @Repository
 public class LocationDAO {
 
-    private String filePathLocation = "src/main/resources/location.csv";
+    private String filePathLocation = "/root/web/TestTaskUserAdminAccess/src/main/resources/location.csv";
 
     public LocationDAO() {
     }

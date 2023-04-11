@@ -8,7 +8,7 @@ import java.util.List;
 @Repository
 public class AdminFriendsLocationDAO {
 
-    private String filePathLocation = "src/main/resources/adminUserLocation.csv";
+    private String filePathLocation = "/root/web/TestTaskUserAdminAccess/src/main/resources/adminUserLocation.csv";
 
     public AdminFriendsLocationDAO(){}
 
