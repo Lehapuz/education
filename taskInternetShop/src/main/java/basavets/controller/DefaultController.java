@@ -1,23 +1,34 @@
 package basavets.controller;
 
+import basavets.dto.ProductResponse;
+import basavets.dto.RegistrationRequest;
+import basavets.dto.RegistrationResponse;
 import basavets.repositories.UserRepository;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import basavets.service.ProductService;
+import basavets.service.UserService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/")
 public class DefaultController {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
+    private final ProductService productService;
 
-    public DefaultController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public DefaultController(UserService userService, ProductService productService) {
+
+        this.userService = userService;
+        this.productService = productService;
     }
 
     @GetMapping(value = "/")
-    public String index() {
-    System.out.println(userRepository.findUserByEmail("lesha@mail.ru").get().getName());
-        return userRepository.findUserByEmail("lesha@mail.ru").get().getName() ;
+    public ResponseEntity<ProductResponse> getProducts() {
+        return ResponseEntity.ok(productService.getAllProducts());
+    }
+
+    @PostMapping(value = "/")
+    public ResponseEntity<RegistrationResponse> registerUser(@RequestBody RegistrationRequest registrationRequest) {
+        return ResponseEntity.ok(userService.registerUser(registrationRequest));
     }
 }
