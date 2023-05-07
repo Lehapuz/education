@@ -18,6 +18,5 @@ bosovec/
 # BlueJ files
 *.ctxt
 TestTaskJson/
-TelegramBotCrypto/
-internetShop/
-
+*.properties
+src/main/resources/
