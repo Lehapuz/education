@@ -3,6 +3,11 @@ package basavets.service;
 import basavets.beans.User;
 import basavets.dto.*;
 import basavets.repositories.UserRepository;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -11,9 +16,12 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final AuthenticationManager authenticationManager;
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12);
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, AuthenticationManager authenticationManager) {
         this.userRepository = userRepository;
+        this.authenticationManager = authenticationManager;
     }
 
     public RegistrationResponse registerUser(RegistrationRequest registrationRequest) {
@@ -22,10 +30,10 @@ public class UserService {
         User user = new User();
         user.setEmail(registrationRequest.getEmail());
         user.setName(registrationRequest.getName());
-        user.setPassword(registrationRequest.getPassword());
+        user.setPassword(passwordEncoder.encode(registrationRequest.getPassword()));
         user.setIsModerator(0);
 
-        if (registrationRequest.getName().isBlank()) {
+        if (registrationRequest.getName() == null || registrationRequest.getName().isBlank()) {
             registerErrorResponse.setName("Имя не должно быть пустым");
             registrationResponse.setResult(false);
             registrationResponse.setRegisterErrorResponse(registerErrorResponse);
@@ -45,24 +53,38 @@ public class UserService {
     }
 
     public LoginResponse authenticationUser(LoginRequest loginRequest) {
+
+        Authentication auth = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        loginRequest.getEmail(),
+                        loginRequest.getPassword()));
+        SecurityContextHolder.getContext().setAuthentication(auth);
+
+        org.springframework.security.core.userdetails.User user
+                = (org.springframework.security.core.userdetails.User) auth.getPrincipal();
+
+        Optional<User> currentUser = userRepository.findUserByEmail(user.getUsername());
+
         LoginResponse loginResponse = new LoginResponse();
         UserLoginResponse userLoginResponse = new UserLoginResponse();
-
-        Optional<User> currentUser = userRepository.findUserByEmail(loginRequest.getEmail());
 
         if (currentUser.isEmpty()) {
             loginResponse.setResult(false);
         } else {
             userLoginResponse.setEmail(loginRequest.getEmail());
-            if (currentUser.get().getPassword().equals(loginRequest.getPassword())) {
-                userLoginResponse.setPassword(loginRequest.getPassword());
-                loginResponse.setUserLoginResponse(userLoginResponse);
-                loginResponse.setResult(true);
-            }
-            else {
-                loginResponse.setResult(false);
-            }
+
+            userLoginResponse.setPassword(loginRequest.getPassword());
+            userLoginResponse.setId(currentUser.get().getId());
+            userLoginResponse.setName(currentUser.get().getName());
+            loginResponse.setUserLoginResponse(userLoginResponse);
+            loginResponse.setResult(true);
         }
+        return loginResponse;
+    }
+
+    public LoginResponse logOutUser() {
+        LoginResponse loginResponse = new LoginResponse();
+        loginResponse.setResult(true);
         return loginResponse;
     }
 }

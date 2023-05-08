@@ -19,8 +19,9 @@ public class Purchase {
     private Product product;
 
     @Column(nullable = false)
-    private Integer amount;
+    private Integer value;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Status status;
 
@@ -48,12 +49,12 @@ public class Purchase {
         this.product = product;
     }
 
-    public Integer getAmount() {
-        return amount;
+    public Integer getValue() {
+        return value;
     }
 
-    public void setAmount(Integer amount) {
-        this.amount = amount;
+    public void setValue(Integer value) {
+        this.value = value;
     }
 
     public Status getStatus() {
