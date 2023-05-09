@@ -18,3 +18,5 @@ bosovec/
 # BlueJ files
 *.ctxt
 TestTaskJson/
+*.properties
+*.yaml
