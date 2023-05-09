@@ -35,54 +35,52 @@ public class ProductService {
     public ProductOrderResponse orderProduct(ProductOrderRequest productOrderRequest, int productId) {
 
         ProductOrderResponse productOrderResponse = new ProductOrderResponse();
-        Optional<User> currentUser = Optional.empty();
+
         try {
             org.springframework.security.core.userdetails.User user = (org.springframework.security.core.userdetails.User)
                     SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            currentUser = userRepository.findUserByEmail(user.getUsername());
+            Optional<User> currentUser = userRepository.findUserByEmail(user.getUsername());
+            Optional<Product> product = productRepository.findById(productId);
+            Status status = Status.IN_PROGRESS;
+
+            if (product.isEmpty() || productOrderRequest.getAmount() > product.get().getAmount()) {
+                productOrderResponse.setResult(false);
+            } else {
+                Purchase purchase = new Purchase();
+                purchase.setUser(currentUser.get());
+                purchase.setProduct(product.get());
+                purchase.setValue(productOrderRequest.getAmount());
+                purchase.setStatus(status);
+                productOrderResponse.setResult(true);
+                purchaseRepository.save(purchase);
+                product.get().setAmount(product.get().getAmount() - productOrderRequest.getAmount());
+                productRepository.save(product.get());
+            }
         } catch (Exception e) {
             productOrderResponse.setResult(false);
         }
-
-        Optional<Product> product = productRepository.findById(productId);
-        Status status = Status.IN_PROGRESS;
-
-        if (product.isEmpty() || productOrderRequest.getAmount() > product.get().getAmount()) {
-            productOrderResponse.setResult(false);
-        } else {
-            Purchase purchase = new Purchase();
-            purchase.setUser(currentUser.get());
-            purchase.setProduct(product.get());
-            purchase.setValue(productOrderRequest.getAmount());
-            purchase.setStatus(status);
-            productOrderResponse.setResult(true);
-            purchaseRepository.save(purchase);
-            product.get().setAmount(product.get().getAmount() - productOrderRequest.getAmount());
-            productRepository.save(product.get());
-        }
-
         return productOrderResponse;
     }
 
     public ProductSetResponse setProduct(ProductSetRequest productSetRequest) {
 
         ProductSetResponse productSetResponse = new ProductSetResponse();
-        Optional<User> currentUser = Optional.empty();
+
         try {
             org.springframework.security.core.userdetails.User user = (org.springframework.security.core.userdetails.User)
                     SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            currentUser = userRepository.findUserByEmail(user.getUsername());
-        } catch (Exception e) {
-            productSetResponse.setResult(false);
-        }
+            Optional<User> currentUser = userRepository.findUserByEmail(user.getUsername());
 
-        if (currentUser.get().getIsModerator() == 1) {
-            Product product = new Product();
-            product.setName(productSetRequest.getName());
-            product.setAmount(productSetRequest.getAmount());
-            productSetResponse.setResult(true);
-            productRepository.save(product);
-        } else {
+            if (currentUser.get().getIsModerator() == 1) {
+                Product product = new Product();
+                product.setName(productSetRequest.getName());
+                product.setAmount(productSetRequest.getAmount());
+                productSetResponse.setResult(true);
+                productRepository.save(product);
+            } else {
+                productSetResponse.setResult(false);
+            }
+        } catch (Exception e) {
             productSetResponse.setResult(false);
         }
         return productSetResponse;
@@ -91,21 +89,21 @@ public class ProductService {
     public ChangeProductStatusResponse changeStatus(int purchaseId) {
 
         ChangeProductStatusResponse changeProductStatusResponse = new ChangeProductStatusResponse();
-        Optional<User> currentUser = Optional.empty();
+
         try {
             org.springframework.security.core.userdetails.User user = (org.springframework.security.core.userdetails.User)
                     SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            currentUser = userRepository.findUserByEmail(user.getUsername());
-        } catch (Exception e) {
-            changeProductStatusResponse.setResult(false);
-        }
+            Optional<User> currentUser = userRepository.findUserByEmail(user.getUsername());
 
-        if (currentUser.get().getIsModerator() == 1) {
-            Optional<Purchase> purchase = purchaseRepository.findById(purchaseId);
-            purchase.get().setStatus(Status.DELIVERED);
-            changeProductStatusResponse.setResult(true);
-            purchaseRepository.save(purchase.get());
-        } else {
+            if (currentUser.get().getIsModerator() == 1) {
+                Optional<Purchase> purchase = purchaseRepository.findById(purchaseId);
+                purchase.get().setStatus(Status.DELIVERED);
+                changeProductStatusResponse.setResult(true);
+                purchaseRepository.save(purchase.get());
+            } else {
+                changeProductStatusResponse.setResult(false);
+            }
+        } catch (Exception e) {
             changeProductStatusResponse.setResult(false);
         }
         return changeProductStatusResponse;

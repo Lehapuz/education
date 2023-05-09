@@ -18,5 +18,3 @@ bosovec/
 # BlueJ files
 *.ctxt
 TestTaskJson/
-*.properties
-src/main/resources/

@@ -1,11 +1,9 @@
 package basavets.controller;
 
+import basavets.connectinglayer.ConnectingLayer;
 import basavets.dto.ProductResponse;
 import basavets.dto.RegistrationRequest;
 import basavets.dto.RegistrationResponse;
-import basavets.repositories.UserRepository;
-import basavets.service.ProductService;
-import basavets.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,22 +11,19 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/")
 public class DefaultController {
 
-    private final UserService userService;
-    private final ProductService productService;
+    private final ConnectingLayer connectingLayer;
 
-    public DefaultController(UserService userService, ProductService productService) {
-
-        this.userService = userService;
-        this.productService = productService;
+    public DefaultController(ConnectingLayer connectingLayer) {
+        this.connectingLayer = connectingLayer;
     }
 
     @GetMapping(value = "/")
     public ResponseEntity<ProductResponse> getProducts() {
-        return ResponseEntity.ok(productService.getAllProducts());
+        return ResponseEntity.ok(connectingLayer.getAllProducts());
     }
 
     @PostMapping(value = "/")
     public ResponseEntity<RegistrationResponse> registerUser(@RequestBody RegistrationRequest registrationRequest) {
-        return ResponseEntity.ok(userService.registerUser(registrationRequest));
+        return ResponseEntity.ok(connectingLayer.registerUser(registrationRequest));
     }
 }
