@@ -1,0 +1,22 @@
+
+# Created by https://www.gitignore.io/api/java,linux,macos,maven,windows,jetbrains
+# Edit at https://www.gitignore.io/?templates=java,linux,macos,maven,windows,jetbrains
+
+### Java ###
+# Compiled class file
+*.class
+target/
+.idea/
+build/
+bosovec/
+.gradle/
+*.iml
+
+# Log file
+*.log
+
+# BlueJ files
+*.ctxt
+TestTaskJson/
+*.properties
+
