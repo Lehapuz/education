@@ -17,8 +17,5 @@ bosovec/
 
 # BlueJ files
 *.ctxt
-TestTaskJson/
-internetShop/
-taskInternetShop/out/
-
+out/
 

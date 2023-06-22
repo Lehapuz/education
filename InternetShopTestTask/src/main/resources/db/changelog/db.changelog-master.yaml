@@ -1,0 +1,195 @@
+databaseChangeLog:
+  - logicalFilePath: src/main/resources/db/changelog/db.changelog-master.yaml
+  - changeSet:
+      id: 1
+      author: aliaksei_basavets
+      changes:
+        - createTable:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  type: INT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: is_moderator
+                  type: TINYINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(250)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email
+                  type: varchar(250)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: password
+                  type: varchar(250)
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 2
+      author: aliaksei_basavets
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: is_moderator
+                  value: 1
+              - column:
+                  name: name
+                  value: Леха
+              - column:
+                  name: email
+                  value: lesha@mail.ru
+              - column:
+                  name: password
+                  value: $2a$12$QSF.a16iAoEa3cJaXp5MC.g.gBkv0eSXdxHTb7VuOUj7k14Tx4b/m
+  - changeSet:
+      id: 3
+      author: aliaksei_basavets
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: is_moderator
+                  value: 0
+              - column:
+                  name: name
+                  value: Вася
+              - column:
+                  name: email
+                  value: Vasya@mail.ru
+              - column:
+                  name: password
+                  value: $2a$12$19tExAf.s7oJJ2xTGw9eYua/2LQKl41u01RjjrEuFmmvb1YbfT8gO
+      rollback:
+        - delete:
+            tableName: users
+            where: username in ('Леха', 'Вася')
+  - changeSet:
+      id: 4
+      author: aliaksei_basavets
+      changes:
+        - createTable:
+            tableName: products
+            columns:
+              - column:
+                  name: id
+                  type: INT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(250)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: amount
+                  type: INT
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 5
+      author: aliaksei_basavets
+      changes:
+        - insert:
+            tableName: products
+            columns:
+              - column:
+                  name: name
+                  value: Телевизор Samsung
+              - column:
+                  name: amount
+                  value: 156
+  - changeSet:
+      id: 6
+      author: aliaksei_basavets
+      changes:
+        - insert:
+            tableName: products
+            columns:
+              - column:
+                  name: name
+                  value: Телевизор LG
+              - column:
+                  name: amount
+                  value: 80
+      rollback:
+        - delete:
+            tableName: products
+            where: productid in ('1', '2')
+  - changeSet:
+      id: 7
+      author: aliaksei_basavets
+      changes:
+        - createTable:
+            tableName: purchases
+            columns:
+              - column:
+                  name: id
+                  type: INT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: INT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: users_purchases_address
+                    referencedTableName: users
+                    referencedColumnNames: id
+              - column:
+                  name: product_id
+                  type: INT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: product_purchases_address
+                    referencedTableName: products
+                    referencedColumnNames: id
+              - column:
+                  name: status
+                  type: ENUM("DELIVERED", "IN_PROGRESS")
+                  constraints:
+                    nullable: false
+              - column:
+                  name: value
+                  type: TINYINT
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 8
+      author: aliaksei_basavets
+      changes:
+        - insert:
+            tableName: purchases
+            columns:
+              - column:
+                  name: user_id
+                  value: 2
+              - column:
+                  name: product_id
+                  value: 2
+              - column:
+                  name: status
+                  value: DELIVERED
+              - column:
+                  name: value
+                  value: 1
+      rollback:
+        - delete:
+            tableName: purchases
+            where: purchaseid in ('1')
