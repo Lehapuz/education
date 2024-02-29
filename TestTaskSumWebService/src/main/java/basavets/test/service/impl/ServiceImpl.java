@@ -10,6 +10,7 @@ import basavets.test.service.Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.math.BigInteger;
 import java.util.Objects;
 
 @org.springframework.stereotype.Service
@@ -18,7 +19,7 @@ import java.util.Objects;
 public class ServiceImpl implements Service {
 
     private final static String SUCCESSFUL_CODE = "0";
-    private final static String UNSUCCESSFUL_CODE = "1";
+    private final static String UNSUCCESSFUL_CODE = "-1";
     private final static String SUCCESSFUL_DESCRIPTION = "OK";
     private final static String ALREADY_EXIST_DESCRIPTION = "This name already exist";
     private final static String NOT_FOUND_DESCRIPTION = "This name is not found";
@@ -48,7 +49,7 @@ public class ServiceImpl implements Service {
     @Override
     public ResponseDto deleteData(DeleteRequestDto deleteRequestDto) {
         Data data = sumRepository.findByName(deleteRequestDto.name());
-        if (!Objects.nonNull(data)) {
+        if (Objects.isNull(data)) {
             log.info("this " + deleteRequestDto.name() + " is not found");
             return ResponseDto.builder()
                     .code(UNSUCCESSFUL_CODE)
@@ -67,7 +68,7 @@ public class ServiceImpl implements Service {
     public ResponseDto calculateSum(CalculateRequestDto calculateRequestDto) {
         Data firstData = sumRepository.findByName(calculateRequestDto.first());
         Data secondData = sumRepository.findByName(calculateRequestDto.second());
-        if (!Objects.nonNull(firstData) || !Objects.nonNull(secondData)) {
+        if (Objects.isNull(firstData) || Objects.isNull(secondData)) {
             log.info("this " + calculateRequestDto.first() + " or " + calculateRequestDto.second() + " is not found");
             return ResponseDto.builder()
                     .code(UNSUCCESSFUL_CODE)
@@ -83,7 +84,7 @@ public class ServiceImpl implements Service {
                 .build();
     }
 
-    private int calculate(int a, int b) {
-        return a + b;
+    private BigInteger calculate(Integer a, Integer b) {
+        return BigInteger.valueOf(a + b);
     }
 }

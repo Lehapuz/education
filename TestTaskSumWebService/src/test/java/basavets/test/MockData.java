@@ -6,6 +6,8 @@ import basavets.test.dto.request.DeleteRequestDto;
 import basavets.test.dto.response.ResponseDto;
 import basavets.test.entity.Data;
 
+import java.math.BigInteger;
+
 public class MockData {
 
     public static Data getValidData1() {
@@ -53,20 +55,20 @@ public class MockData {
         return ResponseDto.builder()
                 .code("0")
                 .description("OK")
-                .sum(3)
+                .sum(BigInteger.valueOf(3))
                 .build();
     }
 
     public static ResponseDto getAlreadyExistResponseDto() {
         return ResponseDto.builder()
-                .code("1")
+                .code("-1")
                 .description("This name already exist")
                 .build();
     }
 
     public static ResponseDto getNotFoundResponseDto() {
         return ResponseDto.builder()
-                .code("1")
+                .code("-1")
                 .description("This name is not found")
                 .build();
     }
