@@ -68,7 +68,7 @@ public class MockData {
 
     public static ResponseDto getNotFoundResponseDto() {
         return ResponseDto.builder()
-                .code("-1")
+                .code("-2")
                 .description("This name is not found")
                 .build();
     }
